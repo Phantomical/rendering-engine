@@ -25,6 +25,9 @@
     <ClInclude Include="handle.h" />
     <ClInclude Include="interface.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dispatcher.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9E1E4780-5FF9-4485-8915-99C1ABDAEB18}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
