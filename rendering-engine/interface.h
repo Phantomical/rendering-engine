@@ -92,12 +92,12 @@ namespace gldr
 		texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
 		//Order of faces in the data array is as follows: top, bottom, front, back, right, left
 		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<void*, 6>& data);
-		void create_rendertarget(render_target_handle* out /*, TODO */);
+		void create_render_target(render_target_handle* out /*, TODO */);
 
 		void delete_buffer(buffer_handle buffer);
 		void delete_shader(shader_handle shader);
 		void delete_texture(texture_handle image);
-		void delete_rendertarget(render_target_handle render_target);
+		void delete_render_target(render_target_handle render_target);
 
 		void set_buffer_data(buffer_handle buffer, size_t size, const void* data);
 		//TODO: Draw Commands
