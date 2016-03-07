@@ -11,6 +11,7 @@
 
 namespace gldr
 {
+	GLDR_DECLARE_HANDLE(mesh_handle);
 	GLDR_DECLARE_HANDLE(buffer_handle);
 	GLDR_DECLARE_HANDLE(shader_handle);
 	GLDR_DECLARE_HANDLE(texture_handle);
@@ -98,13 +99,7 @@ namespace gldr
 		void delete_texture(texture_handle image);
 		void delete_rendertarget(render_target_handle render_target);
 
-		void map_buffer_range(void** out, buffer_handle buffer, size_t start, size_t end, buffer_access_flags access);
-		//Unmaps the buffer while publishing any changes made to GPU memory
-		void unmap_buffer(buffer_handle buffer);
-		//Flushes the buffer to GPU memory. Using this buffer handle in any way will
-		//result in undefined behaviour
-		void flush_buffer(buffer_handle buffer);
-
+		void set_buffer_data(buffer_handle buffer, size_t size, const void* data);
 		//TODO: Draw Commands
 	}
 
