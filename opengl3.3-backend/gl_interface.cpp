@@ -82,6 +82,12 @@ namespace gldr
 			GL_DYNAMIC_READ,
 			GL_DYNAMIC_COPY
 		};
+		static const GLenum buffer_access_flags[] =
+		{
+			GL_READ_ONLY,
+			GL_WRITE_ONLY,
+			GL_READ_WRITE
+		};
 	}
 	namespace commands
 	{
@@ -157,7 +163,12 @@ namespace gldr
 		{
 			detail::handle handle;
 		};
-
+		struct set_buffer_data
+		{
+			const void* data;
+			GLsizeiptr size;
+			detail::handle handle;
+		};
 	}
 
 	struct command
@@ -180,12 +191,17 @@ namespace gldr
 			commands::delete_buffer delete_buffer;
 			commands::delete_shader delete_shader;
 			commands::delete_texture delete_texture;
+			commands::set_buffer_data set_buffer_data;
 		};
 	};
 
 	constexpr size_t cmdsz = sizeof(command);
 
-	typedef GLuint buffer;
+	struct buffer
+	{
+		GLuint id;
+		GLenum usage;
+	};
 	typedef GLuint shader;
 	typedef GLuint texture;
 
@@ -220,10 +236,11 @@ namespace gldr
 	{
 		DECLARE_CMD(create_buffer);
 		buffer buf;
+		buf.usage = enums::buffer_usages[(uint8_t)cmd->usage];
 
-		glGenBuffers(1, &buf);
-		glBindBuffer(GL_ARRAY_BUFFER, buf);
-		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, enums::buffer_usages[(uint8_t)cmd->usage]);
+		glGenBuffers(1, &buf.id);
+		glBindBuffer(GL_ARRAY_BUFFER, buf.id);
+		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 
 		st.buffers.attach_value(cmd->handle, buf);
 	}
@@ -315,6 +332,37 @@ namespace gldr
 		st.textures.attach_value(cmd->handle, id);
 	}
 
+	void delete_buffer(state& st, void* data)
+	{
+		DECLARE_CMD(delete_buffer);
 
+		GLuint id = st.buffers.at(cmd->handle).id;
+		glDeleteBuffers(1, &id);
+		st.buffers.remove(cmd->handle);
+	}
+	void delete_shader(state& st, void* data)
+	{
+		DECLARE_CMD(delete_shader);
 
+		GLuint id = st.shaders.at(cmd->handle);
+		glDeleteProgram(id);
+		st.shaders.remove(cmd->handle);
+	}
+	void delete_texture(state& st, void* data)
+	{
+		DECLARE_CMD(delete_texture);
+
+		GLuint id = st.buffers.at(cmd->handle).id;
+		glDeleteBuffers(1, &id);
+		st.buffers.remove(cmd->handle);
+	}
+
+	void set_buffer_data(state& st, void* data)
+	{
+		DECLARE_CMD(set_buffer_data);
+
+		buffer buf = st.buffers.at(cmd->handle);
+		glBindBuffer(GL_ARRAY_BUFFER, buf.id);
+		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
+	}
 }
