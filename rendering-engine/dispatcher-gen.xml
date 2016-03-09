@@ -4,7 +4,7 @@
   <lib-include>initializer_list</lib-include>
   <lib-include>utility</lib-include>
   <lib-include>string</lib-include>
-  <lib-inclide>array</lib-inclide>
+  <lib-include>array</lib-include>
 
   <handle type="mesh_handle"/>
   <handle type="buffer_handle"/>
@@ -110,6 +110,7 @@
     <arg type="size_t" name="height"/>
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
+    <arg type="data_type" name="type"/>
     <arg type="const std::array&lt;void*, 6&gt;&amp;" name="data"/>
     <no-implement/>
   </function>
@@ -119,6 +120,7 @@
     <arg type="size_t" name="height"/>
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
+    <arg type="data_type" name="type"/>
     <arg type="const void* const*" name="data"/>
   </function>
   <function name="create_render_target">

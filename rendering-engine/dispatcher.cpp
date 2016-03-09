@@ -1,4 +1,6 @@
 
+#pragma warning(disable:4996)
+
 #include "allocators.h"
 #include "interface.h"
 
@@ -15,7 +17,7 @@ typedef buffer_handle(CALL_CONV*create_buffer_proc)(size_t, const void*, buffer_
 typedef shader_handle(CALL_CONV*create_shader_proc)(size_t, std::pair<shader_stage, std::string>*);
 typedef texture_handle(CALL_CONV*create_texture_2d_proc)(size_t, size_t, internal_format, image_format, data_type, const void*);
 typedef texture_handle(CALL_CONV*create_texture_3d_proc)(size_t, size_t, size_t, internal_format, image_format, data_type, const void*);
-typedef texture_handle(CALL_CONV*create_texture_cubemap_proc)(size_t, size_t, internal_format, image_format, data_type, const void**);
+typedef texture_handle(CALL_CONV*create_texture_cubemap_proc)(size_t, size_t, internal_format, image_format, data_type, const void* const*);
 
 typedef void(CALL_CONV*delete_buffer_proc)(buffer_handle);
 typedef void(CALL_CONV*delete_shader_proc)(shader_handle);
@@ -80,7 +82,11 @@ namespace gldr
 		const void** array = (const void**)alloc.alloc(sizeof(void*) * 6);
 		std::memcpy(array, data.data(), sizeof(const void*) * 6);
 
-		return create_texture_cubemap_func(width, height, iformat, format, type, array);
+		return create_texture_cubemap(width, height, iformat, format, type, array);
+	}
+	texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data)
+	{
+		return create_texture_cubemap_func(width, height, iformat, format, type, data);
 	}
 
 	void delete_buffer(buffer_handle buffer)
