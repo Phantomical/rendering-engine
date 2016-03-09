@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dispatcher>
+  <include>handle.h</include>
+  <lib-include>initializer_list</lib-include>
+  <lib-include>utility</lib-include>
+  <lib-include>string</lib-include>
+  <lib-inclide>array</lib-inclide>
+
+  <handle type="mesh_handle"/>
+  <handle type="buffer_handle"/>
+  <handle type="shader_handle"/>
+  <handle type="texture_handle"/>
+  <handle type="render_target_handle"/>
+
+  <enum name="shader_stage">
+    <value name="VERTEX"/>
+    <value name="FRAGMENT"/>
+    <value name="GEOMETRY"/>
+    <value name="TESS_EVALUATION"/>
+    <value name="TESS_CONTROL"/>
+    <value name="COMPUTE"/>
+  </enum>
+  <enum name="buffer_access_flags">
+    <value name="READ" value="0x1"/>
+    <value name="WRITE" value="0x2"/>
+    <value name="READ_WRITE" value="READ | WRITE"/>
+  </enum>
+  <enum name="buffer_usage">
+    <value name="STREAM_DRAW"/>
+    <value name="STREAM_READ"/>
+    <value name="STREAM_COPY"/>
+    <value name="STATIC_DRAW"/>
+    <value name="STATIC_READ"/>
+    <value name="STATIC_COPY"/>
+    <value name="DYNAMIC_DRAW"/>
+    <value name="DYNAMIC_READ"/>
+    <value name="DYNAMIC_COPY"/>
+  </enum>
+  <enum name="internal_format">
+    <value name="R8"/>
+    <value name="RG8"/>
+    <value name="RGB8"/>
+    <value name="RGBA8"/>
+    <value name="R32F"/>
+    <value name="RG32F"/>
+    <value name="RGB32F"/>
+    <value name="RGBA32F"/>
+  </enum>
+  <enum name="image_format">
+    <value name="RED"/>
+    <value name="GREEN"/>
+    <value name="BLUE"/>
+    <value name="RG"/>
+    <value name="RGB"/>
+    <value name="RGBA"/>
+    <value name="BGR"/>
+    <value name="BGRA"/>
+    <value name="DEPTH_COMPONENT"/>
+    <value name="STENCIL_INDEX"/>
+    <value name="DEPTH_STENCIL"/>
+  </enum>
+  <enum name="data_type">
+    <value name="UNSIGNED_BYTE"/>
+    <value name="UNSIGNED_SHORT"/>
+    <value name="UNSIGNED_INT"/>
+    <value name="BYTE"/>
+    <value name="SHORT"/>
+    <value name="INT"/>
+    <value name="FLOAT"/>
+  </enum>
+
+  <function name="create_buffer">
+    <return type="buffer_handle"/>
+    <arg type="size_t" name="size"/>
+    <arg type="const void*" name="data"/>
+    <arg type="buffer_usage" name="usage"/>
+  </function>
+  <function name="create_shader">
+    <return type="shader_handle"/>
+    <arg type="size_t" name="num_stages"/>
+    <arg type="std::pair&lt;shader_stage, std::string&gt;*" name="height"/>
+  </function>
+  <function name="create_shader">
+    <return type="shader_handle"/>
+    <arg type="const std::initializer_list&lt;std::pair&lt;shader_stage, std::string&gt;&gt;&amp;" name="stages"/>
+    <no-implement/>
+  </function>
+  <function name="create_texture_2d">
+    <return type="texture_handle"/>
+    <arg type="size_t" name="width"/>
+    <arg type="size_t" name="height"/>
+    <arg type="internal_format" name="iformat"/>
+    <arg type="image_format" name="format"/>
+    <arg type="data_type" name="type"/>
+    <arg type="const void*" name="data"/>
+  </function>
+  <function name="create_texture_3d">
+    <return type="texture_handle"/>
+    <arg type="size_t" name="width"/>
+    <arg type="size_t" name="height"/>
+    <arg type="size_t" name="depth"/>
+    <arg type="internal_format" name="iformat"/>
+    <arg type="image_format" name="format"/>
+    <arg type="data_type" name="type"/>
+    <arg type="const void*" name="data"/>
+  </function>
+  <function name="create_texture_cubemap">
+    <return type="texture_handle"/>
+    <arg type="size_t" name="width"/>
+    <arg type="size_t" name="height"/>
+    <arg type="internal_format" name="iformat"/>
+    <arg type="image_format" name="format"/>
+    <arg type="const std::array&lt;void*, 6&gt;&amp;" name="data"/>
+    <no-implement/>
+  </function>
+  <function name="create_texture_cubemap">
+    <return type="texture_handle"/>
+    <arg type="size_t" name="width"/>
+    <arg type="size_t" name="height"/>
+    <arg type="internal_format" name="iformat"/>
+    <arg type="image_format" name="format"/>
+    <arg type="const void* const*" name="data"/>
+  </function>
+  <function name="create_render_target">
+    <return type="render_target_handle"/>
+    <!-- TODO: Figure out arguments for this -->
+  </function>
+
+  <function name="delete_buffer">
+    <return type="void"/>
+    <arg type="buffer_handle" name="buffer"/>
+  </function>
+  <function name="delete_shader">
+    <return type="void"/>
+    <arg type="shader_handle" name="shader"/>
+  </function>
+  <function name="delete_texture">
+    <return type="void"/>
+    <arg type="texture_handle" name="image"/>
+  </function>
+  <function name="delete_render_target">
+    <return type="void"/>
+    <arg type="render_target_handle" name="render_target"/>
+  </function>
+  <function name="set_buffer_data">
+    <return type="void"/>
+    <arg type="buffer_handle" name="buffer"/>
+    <arg type="size_t" name="size"/>
+    <arg type="const void*" name="data"/>
+  </function>
+
+  <function name="swap_buffers">
+    <return type="void"/>
+  </function>
+  <function name="sync">
+    <return type="void"/>
+  </function>
+</dispatcher>
