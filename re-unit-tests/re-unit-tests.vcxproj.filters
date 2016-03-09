@@ -14,32 +14,4 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gl_core.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gl_interface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="concurrent_array.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gl_core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mpsc_queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="packed_array.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sema.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
 </Project>

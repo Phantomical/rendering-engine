@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rendering-engine", "renderi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "opengl3.3-backend", "opengl3.3-backend\opengl3.3-backend.vcxproj", "{903FA041-E7DC-4741-B4D0-BE3D6CEBBF9A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-tests", "unit-tests", "{DBB9DFE5-CC35-47AB-8CAC-6D420DF47B34}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mock-backend", "mock-backend\mock-backend.vcxproj", "{9755AA42-2139-4238-B110-D8E258496C6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,8 +35,19 @@ Global
 		{903FA041-E7DC-4741-B4D0-BE3D6CEBBF9A}.Release|x64.Build.0 = Release|x64
 		{903FA041-E7DC-4741-B4D0-BE3D6CEBBF9A}.Release|x86.ActiveCfg = Release|Win32
 		{903FA041-E7DC-4741-B4D0-BE3D6CEBBF9A}.Release|x86.Build.0 = Release|Win32
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Debug|x64.ActiveCfg = Debug|x64
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Debug|x64.Build.0 = Debug|x64
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Debug|x86.ActiveCfg = Debug|Win32
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Debug|x86.Build.0 = Debug|Win32
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Release|x64.ActiveCfg = Release|x64
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Release|x64.Build.0 = Release|x64
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Release|x86.ActiveCfg = Release|Win32
+		{9755AA42-2139-4238-B110-D8E258496C6A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9755AA42-2139-4238-B110-D8E258496C6A} = {DBB9DFE5-CC35-47AB-8CAC-6D420DF47B34}
 	EndGlobalSection
 EndGlobal
