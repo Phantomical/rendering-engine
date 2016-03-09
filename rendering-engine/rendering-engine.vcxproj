@@ -24,6 +24,7 @@
     <ClInclude Include="drawstate.h" />
     <ClInclude Include="handle.h" />
     <ClInclude Include="interface-old.h" />
+    <ClInclude Include="interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dispatcher.cpp" />

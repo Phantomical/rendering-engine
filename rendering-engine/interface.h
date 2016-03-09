@@ -1,11 +1,10 @@
-#pragma once
+#ifndef RE_INTERFACE_H
+#define RE_INTERFACE_H
 
 #include "handle.h"
-
 #include <initializer_list>
 #include <utility>
 #include <string>
-#include <array>
 
 #define GLDR_DECLARE_HANDLE(name) struct name { detail::handle handle; }
 
@@ -16,23 +15,23 @@ namespace gldr
 	GLDR_DECLARE_HANDLE(shader_handle);
 	GLDR_DECLARE_HANDLE(texture_handle);
 	GLDR_DECLARE_HANDLE(render_target_handle);
-
-	enum class shader_stage : uint8_t
+	
+	enum shader_stage
 	{
 		VERTEX,
 		FRAGMENT,
 		GEOMETRY,
 		TESS_EVALUATION,
 		TESS_CONTROL,
-		COMPUTE
+		COMPUTE,
 	};
-	enum class buffer_access_flags : uint8_t
+	enum buffer_access_flags
 	{
 		READ = 0x1,
 		WRITE = 0x2,
-		READ_WRITE = READ | WRITE
+		READ_WRITE = READ | WRITE,
 	};
-	enum class buffer_usage : uint8_t
+	enum buffer_usage
 	{
 		STREAM_DRAW,
 		STREAM_READ,
@@ -42,9 +41,9 @@ namespace gldr
 		STATIC_COPY,
 		DYNAMIC_DRAW,
 		DYNAMIC_READ,
-		DYNAMIC_COPY
+		DYNAMIC_COPY,
 	};
-	enum class internal_format : uint8_t
+	enum internal_format
 	{
 		R8,
 		RG8,
@@ -53,9 +52,9 @@ namespace gldr
 		R32F,
 		RG32F,
 		RGB32F,
-		RGBA32F
+		RGBA32F,
 	};
-	enum class image_format : uint8_t
+	enum image_format
 	{
 		RED,
 		GREEN,
@@ -67,9 +66,9 @@ namespace gldr
 		BGRA,
 		DEPTH_COMPONENT,
 		STENCIL_INDEX,
-		DEPTH_STENCIL
+		DEPTH_STENCIL,
 	};
-	enum class data_type : uint8_t
+	enum data_type
 	{
 		UNSIGNED_BYTE,
 		UNSIGNED_SHORT,
@@ -77,34 +76,24 @@ namespace gldr
 		BYTE,
 		SHORT,
 		INT,
-		FLOAT
+		FLOAT,
 	};
-
-	//All functions in the unsynched namespace have an undefined
-	//value for their out parameter until a sync occurs.
-	//A sync occurs when sync() is called or swap_buffer() is called.
-	namespace unsynced
-	{
-		buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage_hint);
-		shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
-		shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* stages);
-		texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
-		texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
-		//Order of faces in the data array is as follows: top, bottom, front, back, right, left
-		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<void*, 6>& data);
-		void create_render_target(render_target_handle* out /*, TODO */);
-
-		void delete_buffer(buffer_handle buffer);
-		void delete_shader(shader_handle shader);
-		void delete_texture(texture_handle image);
-		void delete_render_target(render_target_handle render_target);
-
-		void set_buffer_data(buffer_handle buffer, size_t size, const void* data);
-		//TODO: Draw Commands
-	}
-
+	
+	buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
+	shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* height);
+	shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
+	texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
+	texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
+	texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, const std::array<void*, 6>& data);
+	texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, const void* const* data);
+	render_target_handle create_render_target();
+	void delete_buffer(buffer_handle buffer);
+	void delete_shader(shader_handle shader);
+	void delete_texture(texture_handle image);
+	void delete_render_target(render_target_handle render_target);
+	void set_buffer_data(buffer_handle buffer, size_t size, const void* data);
 	void swap_buffers();
 	void sync();
-
-	render_target_handle get_default_render_target();
 }
+
+#endif
