@@ -4,6 +4,7 @@ import sys
 
 file = sys.argv[1]
 outfile = sys.argv[2]
+namespace = "gldr"
 
 tree = ET.parse(file)
 root = tree.getroot()
@@ -33,16 +34,16 @@ for libinc in root.findall("lib-include"):
     write("#include <" + libinc.text + ">")
 
 write("")
-write("#define GLDR_DECLARE_HANDLE(name) struct name { detail::handle handle; }")
+write("#define " + namespace.upper() + "_DECLARE_HANDLE(name) struct name { detail::handle handle; }")
 write("")
-write("namespace gldr")
+write("namespace " + namespace)
 write("{")
 level += 1
 
 for handle in root.findall("handle"):
     type = handle.get("type")
     if type != None:
-        write("GLDR_DECLARE_HANDLE(" + type + ");")
+        write(namespace.upper() + "_DECLARE_HANDLE(" + type + ");")
     else:
         print("Invalid handle declaration detected\n")
 
@@ -69,6 +70,11 @@ for enum in root.findall("enum"):
                     write(valname + " = " + val + ",")
         level -= 1
         write("};")
+
+write("")
+
+write("void init(const std::string& backend_lib);")
+write("void terminate();")
 
 write("")
 

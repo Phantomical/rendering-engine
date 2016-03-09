@@ -23,7 +23,6 @@
     <ClInclude Include="command_queue.h" />
     <ClInclude Include="drawstate.h" />
     <ClInclude Include="handle.h" />
-    <ClInclude Include="interface-old.h" />
     <ClInclude Include="interface.h" />
   </ItemGroup>
   <ItemGroup>

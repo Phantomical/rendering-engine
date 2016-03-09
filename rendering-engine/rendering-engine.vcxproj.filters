@@ -27,9 +27,6 @@
     <ClInclude Include="handle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface-old.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>

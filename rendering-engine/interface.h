@@ -80,6 +80,9 @@ namespace gldr
 		FLOAT,
 	};
 	
+	void init(const std::string& backend_lib);
+	void terminate();
+	
 	buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
 	shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* height);
 	shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
