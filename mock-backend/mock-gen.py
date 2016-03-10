@@ -4,6 +4,7 @@ import sys
 
 file = sys.argv[1]
 outfile = sys.argv[2]
+outfile2 = sys.argv[3]
 namespace = "gldr"
 
 tree = ET.parse(file)
@@ -98,3 +99,23 @@ write("")
 
 with open(outfile, "w") as f:
     f.write(output)
+
+output = ""
+
+write("#ifndef MOCK_DATA_H")
+write("#define MOCK_DATA_H")
+write("")
+write("#ifdef _MSC_VER")
+write("#define MOCK_EXPORT __declspec(dllimport)")
+write("#else")
+write("#define MOCK_EXPORT")
+write("#endif")
+write("")
+for func in funcs:
+    write("MOCK_EXPORT extern size_t " + func.name + "_called;")
+write("")
+write("#endif")
+
+with open(outfile2, "w") as f:
+    f.write(output);
+
