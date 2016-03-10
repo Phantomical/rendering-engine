@@ -23,7 +23,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data.h">
+    <ClInclude Include="mock-data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

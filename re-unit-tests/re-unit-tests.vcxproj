@@ -74,10 +74,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rendering-engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>rendering-engine.lib;mock-backend.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -85,10 +86,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rendering-engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>rendering-engine.lib;mock-backend.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -98,12 +100,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rendering-engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>rendering-engine.lib;mock-backend.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,15 +116,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rendering-engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>rendering-engine.lib;mock-backend.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="backend_called_test.cpp" />
     <ClCompile Include="load_func_test.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

@@ -37,7 +37,7 @@ write("#define CALL_CONV " + namespace.upper() + "_BACKEND_CALL_CONV")
 write("")
 write("void* load_init(const char*);")
 write("void* load_func(void*, const char*);")
-write("void* load_terminate(void*);")
+write("void load_terminate(void*);")
 write("")
 write("namespace " + namespace)
 write("{")
@@ -122,15 +122,29 @@ write("")
 write("void backend::init(const std::string& lib)")
 write("{")
 level += 1
+write("_state = static_cast<state*>(malloc(sizeof(state)));")
 
 write("_state->handle = load_init(lib.c_str());")
 
 for func in funcs:
     write("_state->" + func.name + "_func = static_cast<" + func.name 
-          + "_proc>(load_func(_state->handle, \"" + func.name + "\"));")
+          + "_proc>(load_func(_state->handle, \"_" + func.name + "\"));")
 
 write("_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"terminate\"));")
-write("static_cast<void(*)()>(load_func(_state->handle, \"init\"))();")
+write("void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, \"init\"));")
+write("if (init_func)")
+write("{")
+level += 1
+write("init_func();")
+level -= 1
+write("}")
+write("else")
+write("{")
+level += 1
+write("free(_state);")
+write("_state = nullptr;")
+level -= 1
+write("}")
 
 level -= 1
 write("}")
@@ -140,6 +154,28 @@ write("{")
 level += 1
 write("_state->terminate_func();")
 write("load_terminate(_state->handle);")
+write("free(_state);")
+level -= 1
+write("}")
+
+write("backend::backend(const std::string& backend_lib)")
+write("{")
+level += 1
+write("init(backend_lib);")
+level -= 1
+write("}")
+
+write("backend::~backend()")
+write("{")
+level += 1
+write("terminate();")
+level -= 1
+write("}")
+
+write("bool backend::is_valid() const")
+write("{")
+level += 1
+write("return _state != nullptr;")
 level -= 1
 write("}")
 

@@ -5,7 +5,7 @@
 
 void* load_init(const char*);
 void* load_func(void*, const char*);
-void* load_terminate(void*);
+void load_terminate(void*);
 
 namespace gldr
 {
@@ -97,26 +97,49 @@ namespace gldr
 	
 	void backend::init(const std::string& lib)
 	{
+		_state = static_cast<state*>(malloc(sizeof(state)));
 		_state->handle = load_init(lib.c_str());
-		_state->create_buffer_func = static_cast<create_buffer_proc>(load_func(_state->handle, "create_buffer"));
-		_state->create_shader_func = static_cast<create_shader_proc>(load_func(_state->handle, "create_shader"));
-		_state->create_texture_2d_func = static_cast<create_texture_2d_proc>(load_func(_state->handle, "create_texture_2d"));
-		_state->create_texture_3d_func = static_cast<create_texture_3d_proc>(load_func(_state->handle, "create_texture_3d"));
-		_state->create_texture_cubemap_func = static_cast<create_texture_cubemap_proc>(load_func(_state->handle, "create_texture_cubemap"));
-		_state->create_render_target_func = static_cast<create_render_target_proc>(load_func(_state->handle, "create_render_target"));
-		_state->delete_buffer_func = static_cast<delete_buffer_proc>(load_func(_state->handle, "delete_buffer"));
-		_state->delete_shader_func = static_cast<delete_shader_proc>(load_func(_state->handle, "delete_shader"));
-		_state->delete_texture_func = static_cast<delete_texture_proc>(load_func(_state->handle, "delete_texture"));
-		_state->delete_render_target_func = static_cast<delete_render_target_proc>(load_func(_state->handle, "delete_render_target"));
-		_state->set_buffer_data_func = static_cast<set_buffer_data_proc>(load_func(_state->handle, "set_buffer_data"));
-		_state->swap_buffers_func = static_cast<swap_buffers_proc>(load_func(_state->handle, "swap_buffers"));
-		_state->sync_func = static_cast<sync_proc>(load_func(_state->handle, "sync"));
+		_state->create_buffer_func = static_cast<create_buffer_proc>(load_func(_state->handle, "_create_buffer"));
+		_state->create_shader_func = static_cast<create_shader_proc>(load_func(_state->handle, "_create_shader"));
+		_state->create_texture_2d_func = static_cast<create_texture_2d_proc>(load_func(_state->handle, "_create_texture_2d"));
+		_state->create_texture_3d_func = static_cast<create_texture_3d_proc>(load_func(_state->handle, "_create_texture_3d"));
+		_state->create_texture_cubemap_func = static_cast<create_texture_cubemap_proc>(load_func(_state->handle, "_create_texture_cubemap"));
+		_state->create_render_target_func = static_cast<create_render_target_proc>(load_func(_state->handle, "_create_render_target"));
+		_state->delete_buffer_func = static_cast<delete_buffer_proc>(load_func(_state->handle, "_delete_buffer"));
+		_state->delete_shader_func = static_cast<delete_shader_proc>(load_func(_state->handle, "_delete_shader"));
+		_state->delete_texture_func = static_cast<delete_texture_proc>(load_func(_state->handle, "_delete_texture"));
+		_state->delete_render_target_func = static_cast<delete_render_target_proc>(load_func(_state->handle, "_delete_render_target"));
+		_state->set_buffer_data_func = static_cast<set_buffer_data_proc>(load_func(_state->handle, "_set_buffer_data"));
+		_state->swap_buffers_func = static_cast<swap_buffers_proc>(load_func(_state->handle, "_swap_buffers"));
+		_state->sync_func = static_cast<sync_proc>(load_func(_state->handle, "_sync"));
 		_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, "terminate"));
-		static_cast<void(*)()>(load_func(_state->handle, "init"))();
+		void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, "init"));
+		if (init_func)
+		{
+			init_func();
+		}
+		else
+		{
+			free(_state);
+			_state = nullptr;
+		}
 	}
 	void backend::terminate()
 	{
 		_state->terminate_func();
 		load_terminate(_state->handle);
+		free(_state);
+	}
+	backend::backend(const std::string& backend_lib)
+	{
+		init(backend_lib);
+	}
+	backend::~backend()
+	{
+		terminate();
+	}
+	bool backend::is_valid() const
+	{
+		return _state != nullptr;
 	}
 }

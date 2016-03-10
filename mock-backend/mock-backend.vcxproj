@@ -25,7 +25,7 @@
     <ClCompile Include="mock.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data.h" />
+    <ClInclude Include="mock-data.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9755AA42-2139-4238-B110-D8E258496C6A}</ProjectGuid>

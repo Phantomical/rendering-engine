@@ -95,18 +95,10 @@ write("")
 level -= 1
 write("public:")
 level += 1
-write("backend(const std::string& backend_lib)")
-write("{")
-level += 1
-write("init(backend_lib);")
-level -= 1
-write("}")
-write("~backend()")
-write("{")
-level += 1
-write("terminate();")
-level -= 1
-write("}")
+write("backend(const std::string& backend_lib);")
+write("~backend();")
+write("")
+write("bool is_valid() const;")
 write("")
 
 for func in root.findall("function"):

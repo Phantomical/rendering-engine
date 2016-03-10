@@ -78,18 +78,21 @@ for func in root.findall("function"):
     funcs.append(func_t(name, rettype, args, cnt))
 
 for func in funcs:
-    write("size_t " + func.name + "_called = 0;")
+    write("__declspec(dllexport) size_t " + func.name + "_called = 0;")
 
 write("")
 
 for func in funcs:
-    write("extern \"C\" " + func.rettype + " EXPORT CALL_CONV " + func.name + "(" + func.args + ")")
+    write("extern \"C\" " + func.rettype + " EXPORT CALL_CONV _" + func.name + "(" + func.args + ")")
     write("{")
     level += 1
     write(func.name + "_called++;")
     write("return " + func.rettype + "();")
     level -= 1
     write("}")
+
+write("extern \"C\" void EXPORT CALL_CONV _init() { }")
+write("extern \"C\" void EXPORT CALL_CONV _terminate() { }")
 
 write("")
 

@@ -95,14 +95,10 @@ namespace gldr
 		void terminate();
 		
 	public:
-		backend(const std::string& backend_lib)
-		{
-			init(backend_lib);
-		}
-		~backend()
-		{
-			terminate();
-		}
+		backend(const std::string& backend_lib);
+		~backend();
+		
+		bool is_valid() const;
 		
 		buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
 		shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* height);
