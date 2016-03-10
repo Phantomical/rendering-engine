@@ -35,6 +35,14 @@ for libinc in root.findall("lib-include"):
 
 write("")
 write("#define " + namespace.upper() + "_DECLARE_HANDLE(name) struct name { detail::handle handle; }")
+#On windows we need to specify the calling convention of the backend
+#so we don't have the backend using a different calling convention
+write("//This is the calling convention that MUST be used when creating renderer backends")
+write("#ifdef _WIN32")
+write("#\tdefine " + namespace.upper() + "_BACKEND_CALL_CONV __cdecl")
+write("#else")
+write("#\tdefine " + namespace.upper() + "_BACKEND_CALL_CONV")
+write("#endif")
 write("")
 write("namespace " + namespace)
 write("{")
@@ -73,9 +81,32 @@ for enum in root.findall("enum"):
 
 write("")
 
+write("class backend")
+write("{")
+write("private:")
+level += 1
+write("struct state;")
+write("state* _state;")
+
 write("void init(const std::string& backend_lib);")
 write("void terminate();")
 
+write("")
+level -= 1
+write("public:")
+level += 1
+write("backend(const std::string& backend_lib)")
+write("{")
+level += 1
+write("init(backend_lib);")
+level -= 1
+write("}")
+write("~backend()")
+write("{")
+level += 1
+write("terminate();")
+level -= 1
+write("}")
 write("")
 
 for func in root.findall("function"):
@@ -105,6 +136,9 @@ for func in root.findall("function"):
            cond = True
        decl += type + " " + name
     write(decl + ");")
+
+level -= 1
+write("};")
 
 level -= 1
 write("}")

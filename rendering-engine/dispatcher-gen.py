@@ -33,9 +33,7 @@ def write(val):
 write("#include \"allocators.h\"")
 write("#include \"interface.h\"")
 write("")
-write("#ifdef _WIN32")
-write("#\tdefine CALL_CONV __cdecl")
-write("#endif")
+write("#define CALL_CONV " + namespace.upper() + "_BACKEND_CALL_CONV")
 write("")
 write("void* load_init(const char*);")
 write("void* load_func(void*, const char*);")
@@ -85,16 +83,25 @@ for func in funcs:
     write("typedef " + func.rettype + "(CALL_CONV*" + func.name + "_proc)(" + func.args + ");")
 
 write("")
+write("struct backend::state")
+write("{")
+level += 1
 
 #declare variables
 for func in funcs:
     write(func.name + "_proc " + func.name +"_func;")
 
+#Backend terminate function, we don't store the init function because we won't need it later
+write("void(*terminate_func)();")
+write("void* handle;");
+
+level -= 1
+write("};")
 write("")
 
 #declare prototypes
 for func in funcs:
-    write(func.rettype + " " + func.name + "(" + func.args + ")")
+    write(func.rettype + " backend::" + func.name + "(" + func.args + ")")
     write("{")
     level += 1
     cond = False
@@ -105,38 +112,34 @@ for func in funcs:
         else:
             cond = True
         decl += "arg" + str(i)
-    write("return " + func.name + "_func(" + decl + ");")
+    write("return _state->" + func.name + "_func(" + decl + ");")
     level -= 1
     write("}")
 
 write("")
 
-#Backend terminate function, we don't store the init function
-write("void(*terminate_func)();")
-write("void* handle;");
-
 #init method
-write("void init(const std::string& lib)")
+write("void backend::init(const std::string& lib)")
 write("{")
 level += 1
 
-write("handle = load_init(lib.c_str());")
+write("_state->handle = load_init(lib.c_str());")
 
 for func in funcs:
-    write(func.name + "_func = static_cast<decltype(" + func.name 
-          + "_func)>(load_func(handle, \"" + func.name + "\"));")
+    write("_state->" + func.name + "_func = static_cast<" + func.name 
+          + "_proc>(load_func(_state->handle, \"" + func.name + "\"));")
 
-write("terminate_func = static_cast<decltype(terminate_func)>(load_func(handle, \"terminate\"));")
-write("static_cast<void(*)()>(load_func(handle, \"init\"))();")
+write("_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"terminate\"));")
+write("static_cast<void(*)()>(load_func(_state->handle, \"init\"))();")
 
 level -= 1
 write("}")
 
-write("void terminate()")
+write("void backend::terminate()")
 write("{")
 level += 1
-write("terminate_func();")
-write("load_terminate(handle);")
+write("_state->terminate_func();")
+write("load_terminate(_state->handle);")
 level -= 1
 write("}")
 

@@ -8,6 +8,12 @@
 #include <array>
 
 #define GLDR_DECLARE_HANDLE(name) struct name { detail::handle handle; }
+//This is the calling convention that MUST be used when creating renderer backends
+#ifdef _WIN32
+#	define GLDR_BACKEND_CALL_CONV __cdecl
+#else
+#	define GLDR_BACKEND_CALL_CONV
+#endif
 
 namespace gldr
 {
@@ -80,24 +86,40 @@ namespace gldr
 		FLOAT,
 	};
 	
-	void init(const std::string& backend_lib);
-	void terminate();
-	
-	buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
-	shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* height);
-	shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
-	texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
-	texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
-	texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<void*, 6>& data);
-	texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data);
-	render_target_handle create_render_target();
-	void delete_buffer(buffer_handle buffer);
-	void delete_shader(shader_handle shader);
-	void delete_texture(texture_handle image);
-	void delete_render_target(render_target_handle render_target);
-	void set_buffer_data(buffer_handle buffer, size_t size, const void* data);
-	void swap_buffers();
-	void sync();
+	class backend
+	{
+	private:
+		struct state;
+		state* _state;
+		void init(const std::string& backend_lib);
+		void terminate();
+		
+	public:
+		backend(const std::string& backend_lib)
+		{
+			init(backend_lib);
+		}
+		~backend()
+		{
+			terminate();
+		}
+		
+		buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
+		shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* height);
+		shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
+		texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
+		texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
+		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<void*, 6>& data);
+		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data);
+		render_target_handle create_render_target();
+		void delete_buffer(buffer_handle buffer);
+		void delete_shader(shader_handle shader);
+		void delete_texture(texture_handle image);
+		void delete_render_target(render_target_handle render_target);
+		void set_buffer_data(buffer_handle buffer, size_t size, const void* data);
+		void swap_buffers();
+		void sync();
+	};
 }
 
 #endif
