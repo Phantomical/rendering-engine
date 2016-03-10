@@ -111,7 +111,7 @@
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
     <arg type="data_type" name="type"/>
-    <arg type="const std::array&lt;void*, 6&gt;&amp;" name="data"/>
+    <arg type="const std::array&lt;const void*, 6&gt;&amp;" name="data"/>
     <no-implement/>
   </function>
   <function name="create_texture_cubemap">

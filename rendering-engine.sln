@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-tests", "unit-tests", "{DBB9DFE5-CC35-47AB-8CAC-6D420DF47B34}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mock-backend", "mock-backend\mock-backend.vcxproj", "{9755AA42-2139-4238-B110-D8E258496C6A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9E1E4780-5FF9-4485-8915-99C1ABDAEB18} = {9E1E4780-5FF9-4485-8915-99C1ABDAEB18}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "re-unit-tests", "re-unit-tests\re-unit-tests.vcxproj", "{8DAA33CD-B270-4878-8C06-2550AC828B9C}"
 	ProjectSection(ProjectDependencies) = postProject

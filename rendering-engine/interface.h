@@ -109,7 +109,7 @@ namespace gldr
 		shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
 		texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
 		texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
-		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<void*, 6>& data);
+		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<const void*, 6>& data);
 		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data);
 		render_target_handle create_render_target();
 		void delete_buffer(buffer_handle buffer);
