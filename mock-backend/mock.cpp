@@ -28,7 +28,7 @@ extern "C" buffer_handle EXPORT CALL_CONV _create_buffer(size_t arg0, const void
 	create_buffer_called++;
 	return buffer_handle();
 }
-extern "C" shader_handle EXPORT CALL_CONV _create_shader(size_t arg0, std::pair<shader_stage, std::string>* arg1)
+extern "C" shader_handle EXPORT CALL_CONV _create_shader(size_t arg0, std::pair<shader_stage, const char*>* arg1)
 {
 	create_shader_called++;
 	return shader_handle();

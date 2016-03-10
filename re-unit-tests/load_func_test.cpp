@@ -12,7 +12,7 @@ TEST_CASE("functions can be loaded through the loader.cpp functions")
 	//opengl32.dll should be present on every windows machine
 	load_state = load_init("opengl32.dll");
 #else
-	SUCCEED("This test not supported on other platforms than windows");
+	SUCCEED("This test not supported on other platforms than windows yet");
 	return;
 #endif
 

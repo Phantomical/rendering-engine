@@ -26,6 +26,7 @@
     <ClInclude Include="interface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="backend.cpp" />
     <ClCompile Include="dispatcher.cpp" />
     <ClCompile Include="loader.cpp" />
   </ItemGroup>

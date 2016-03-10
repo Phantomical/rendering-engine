@@ -1,5 +1,6 @@
 #include "allocators.h"
 #include "interface.h"
+#include <functional>
 
 #define CALL_CONV GLDR_BACKEND_CALL_CONV
 
@@ -10,7 +11,7 @@ void load_terminate(void*);
 namespace gldr
 {
 	typedef buffer_handle(CALL_CONV*create_buffer_proc)(size_t arg0, const void* arg1, buffer_usage arg2);
-	typedef shader_handle(CALL_CONV*create_shader_proc)(size_t arg0, std::pair<shader_stage, std::string>* arg1);
+	typedef shader_handle(CALL_CONV*create_shader_proc)(size_t arg0, std::pair<shader_stage, const char*>* arg1);
 	typedef texture_handle(CALL_CONV*create_texture_2d_proc)(size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* arg5);
 	typedef texture_handle(CALL_CONV*create_texture_3d_proc)(size_t arg0, size_t arg1, size_t arg2, internal_format arg3, image_format arg4, data_type arg5, const void* arg6);
 	typedef texture_handle(CALL_CONV*create_texture_cubemap_proc)(size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* const* arg5);
@@ -40,13 +41,18 @@ namespace gldr
 		sync_proc sync_func;
 		void(*terminate_func)();
 		void* handle;
+		allocators::linear_atomic alloc;
+		
+		state() :
+			alloc(1 << 16)
+		{ }
 	};
 	
 	buffer_handle backend::create_buffer(size_t arg0, const void* arg1, buffer_usage arg2)
 	{
 		return _state->create_buffer_func(arg0, arg1, arg2);
 	}
-	shader_handle backend::create_shader(size_t arg0, std::pair<shader_stage, std::string>* arg1)
+	shader_handle backend::create_shader(size_t arg0, std::pair<shader_stage, const char*>* arg1)
 	{
 		return _state->create_shader_func(arg0, arg1);
 	}
@@ -88,6 +94,11 @@ namespace gldr
 	}
 	void backend::swap_buffers()
 	{
+		struct cb {
+			std::function<void()> f;
+			cb(const std::function<void()>& v) : f(v) { }
+			~cb() { f(); }
+		} c([=](){ this->sync_callback(); });
 		return _state->swap_buffers_func();
 	}
 	void backend::sync()
@@ -97,7 +108,7 @@ namespace gldr
 	
 	void backend::init(const std::string& lib)
 	{
-		_state = static_cast<state*>(malloc(sizeof(state)));
+		_state = new state;
 		_state->handle = load_init(lib.c_str());
 		_state->create_buffer_func = static_cast<create_buffer_proc>(load_func(_state->handle, "_create_buffer"));
 		_state->create_shader_func = static_cast<create_shader_proc>(load_func(_state->handle, "_create_shader"));
@@ -112,23 +123,26 @@ namespace gldr
 		_state->set_buffer_data_func = static_cast<set_buffer_data_proc>(load_func(_state->handle, "_set_buffer_data"));
 		_state->swap_buffers_func = static_cast<swap_buffers_proc>(load_func(_state->handle, "_swap_buffers"));
 		_state->sync_func = static_cast<sync_proc>(load_func(_state->handle, "_sync"));
-		_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, "terminate"));
-		void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, "init"));
+		_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, "_terminate"));
+		void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, "_init"));
 		if (init_func)
 		{
 			init_func();
 		}
 		else
 		{
-			free(_state);
+			delete _state;
 			_state = nullptr;
 		}
 	}
 	void backend::terminate()
 	{
-		_state->terminate_func();
-		load_terminate(_state->handle);
-		free(_state);
+		if (_state != nullptr)
+		{
+			_state->terminate_func();
+			load_terminate(_state->handle);
+			delete _state;
+		}
 	}
 	backend::backend(const std::string& backend_lib)
 	{
@@ -141,5 +155,9 @@ namespace gldr
 	bool backend::is_valid() const
 	{
 		return _state != nullptr;
+	}
+	allocators::linear_atomic* backend::allocator()
+	{
+		return &_state->alloc;
 	}
 }

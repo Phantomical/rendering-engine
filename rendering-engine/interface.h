@@ -2,6 +2,7 @@
 #define RE_INTERFACE_H
 
 #include "handle.h"
+#include "allocators.h"
 #include <initializer_list>
 #include <utility>
 #include <string>
@@ -93,16 +94,20 @@ namespace gldr
 		state* _state;
 		void init(const std::string& backend_lib);
 		void terminate();
+		void sync_callback();
+		allocators::linear_atomic* allocator();
 		
 	public:
 		backend(const std::string& backend_lib);
 		~backend();
+		backend(const backend&) = delete;
+		void operator =(const backend&) = delete;
 		
 		bool is_valid() const;
 		
 		buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
-		shader_handle create_shader(size_t num_stages, std::pair<shader_stage, std::string>* height);
-		shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, std::string>>& stages);
+		shader_handle create_shader(size_t num_stages, std::pair<shader_stage, const char*>* stages);
+		shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, const char*>>& stages);
 		texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
 		texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
 		texture_handle create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<const void*, 6>& data);

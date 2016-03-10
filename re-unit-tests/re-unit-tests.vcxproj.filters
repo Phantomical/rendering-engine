@@ -24,6 +24,9 @@
     <ClCompile Include="backend_called_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="allocators.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catch.hpp">

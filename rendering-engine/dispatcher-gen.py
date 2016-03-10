@@ -13,11 +13,12 @@ output = ""
 level = 0
 
 class func_t:
-    def __init__(self, name, rettype, args, nargs):
+    def __init__(self, name, rettype, args, nargs, sync):
         self.name = name
         self.rettype = rettype
         self.args = args
         self.nargs = nargs
+        self.sync = sync
 
 def getlevel():
     global level
@@ -32,6 +33,7 @@ def write(val):
 
 write("#include \"allocators.h\"")
 write("#include \"interface.h\"")
+write("#include <functional>")
 write("")
 write("#define CALL_CONV " + namespace.upper() + "_BACKEND_CALL_CONV")
 write("")
@@ -76,7 +78,7 @@ for func in root.findall("function"):
            cond = True
        args += type + " arg" + str(cnt)
        cnt += 1
-    funcs.append(func_t(name, rettype, args, cnt))
+    funcs.append(func_t(name, rettype, args, cnt, func.find("sync") != None))
 
 #declare typedefs
 for func in funcs:
@@ -94,6 +96,11 @@ for func in funcs:
 #Backend terminate function, we don't store the init function because we won't need it later
 write("void(*terminate_func)();")
 write("void* handle;");
+write("allocators::linear_atomic alloc;")
+write("")
+write("state() :")
+write("\talloc(1 << 16)")
+write("{ }")
 
 level -= 1
 write("};")
@@ -112,6 +119,14 @@ for func in funcs:
         else:
             cond = True
         decl += "arg" + str(i)
+    if func.sync:
+        write("struct cb {")
+        level += 1
+        write("std::function<void()> f;")
+        write("cb(const std::function<void()>& v) : f(v) { }")
+        write("~cb() { f(); }")
+        level -= 1
+        write("} c([=](){ this->sync_callback(); });")
     write("return _state->" + func.name + "_func(" + decl + ");")
     level -= 1
     write("}")
@@ -122,16 +137,16 @@ write("")
 write("void backend::init(const std::string& lib)")
 write("{")
 level += 1
-write("_state = static_cast<state*>(malloc(sizeof(state)));")
+write("_state = new state;")
 
 write("_state->handle = load_init(lib.c_str());")
 
 for func in funcs:
     write("_state->" + func.name + "_func = static_cast<" + func.name 
-          + "_proc>(load_func(_state->handle, \"_" + func.name + "\"));")
+        + "_proc>(load_func(_state->handle, \"_" + func.name + "\"));")
 
-write("_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"terminate\"));")
-write("void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, \"init\"));")
+write("_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"_terminate\"));")
+write("void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, \"_init\"));")
 write("if (init_func)")
 write("{")
 level += 1
@@ -141,7 +156,7 @@ write("}")
 write("else")
 write("{")
 level += 1
-write("free(_state);")
+write("delete _state;")
 write("_state = nullptr;")
 level -= 1
 write("}")
@@ -152,9 +167,14 @@ write("}")
 write("void backend::terminate()")
 write("{")
 level += 1
+write("if (_state != nullptr)")
+write("{")
+level += 1
 write("_state->terminate_func();")
 write("load_terminate(_state->handle);")
-write("free(_state);")
+write("delete _state;")
+level -= 1
+write("}")
 level -= 1
 write("}")
 
@@ -179,6 +199,12 @@ write("return _state != nullptr;")
 level -= 1
 write("}")
 
+write("allocators::linear_atomic* backend::allocator()")
+write("{")
+level += 1
+write("return &_state->alloc;")
+level -= 1
+write("}")
 
 level -= 1
 write("}")

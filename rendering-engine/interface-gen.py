@@ -29,6 +29,7 @@ write("")
 
 for include in root.findall("include"):
     write("#include \"" + include.text + "\"")
+write("#include \"allocators.h\"")
 
 for libinc in root.findall("lib-include"):
     write("#include <" + libinc.text + ">")
@@ -90,6 +91,8 @@ write("state* _state;")
 
 write("void init(const std::string& backend_lib);")
 write("void terminate();")
+write("void sync_callback();")
+write("allocators::linear_atomic* allocator();")
 
 write("")
 level -= 1
@@ -97,6 +100,8 @@ write("public:")
 level += 1
 write("backend(const std::string& backend_lib);")
 write("~backend();")
+write("backend(const backend&) = delete;")
+write("void operator =(const backend&) = delete;")
 write("")
 write("bool is_valid() const;")
 write("")

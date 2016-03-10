@@ -78,11 +78,11 @@
   <function name="create_shader">
     <return type="shader_handle"/>
     <arg type="size_t" name="num_stages"/>
-    <arg type="std::pair&lt;shader_stage, std::string&gt;*" name="height"/>
+    <arg type="std::pair&lt;shader_stage, const char*&gt;*" name="stages"/>
   </function>
   <function name="create_shader">
     <return type="shader_handle"/>
-    <arg type="const std::initializer_list&lt;std::pair&lt;shader_stage, std::string&gt;&gt;&amp;" name="stages"/>
+    <arg type="const std::initializer_list&lt;std::pair&lt;shader_stage, const char*&gt;&gt;&amp;" name="stages"/>
     <no-implement/>
   </function>
   <function name="create_texture_2d">
@@ -153,8 +153,10 @@
 
   <function name="swap_buffers">
     <return type="void"/>
+    <sync/>
   </function>
   <function name="sync">
     <return type="void"/>
+    <!-- This does not have a sync declaration on purpose -->
   </function>
 </dispatcher>

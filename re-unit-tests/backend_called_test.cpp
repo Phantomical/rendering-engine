@@ -17,6 +17,8 @@ TEST_CASE("backend methods are called correctly when the backend interface metho
 	backend bck{ "mock-backend.a" };
 #endif
 
+	REQUIRE(bck.is_valid());
+
 	TEST_BACKEND_METHOD(create_buffer, 0, nullptr, buffer_usage::STATIC_DRAW);
 	TEST_BACKEND_METHOD(create_shader, 0, nullptr);
 	TEST_BACKEND_METHOD(create_texture_2d, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, nullptr);
