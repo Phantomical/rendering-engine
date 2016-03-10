@@ -111,6 +111,6 @@ write("}")
 write("")
 write("#endif")
 
-with open(outfile, "wb") as out:
+with open(outfile, "w") as out:
     out.write(output)
 

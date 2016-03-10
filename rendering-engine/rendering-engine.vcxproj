@@ -29,6 +29,7 @@
     <ClCompile Include="dispatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="dispatcher-gen.py" />
     <None Include="interface-gen.py" />
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +119,8 @@
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h</Command>
+      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatch.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -142,7 +144,8 @@
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h</Command>
+      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatch.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -170,7 +173,8 @@
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h</Command>
+      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatch.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -198,7 +202,8 @@
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h</Command>
+      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatch.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
