@@ -139,6 +139,7 @@ namespace gldr
 				std::free(mem);
 			}
 
+			standard() = default;
 			//Allocators are not moveable
 			standard(standard&&) = delete;
 			//Allocators are not copyable

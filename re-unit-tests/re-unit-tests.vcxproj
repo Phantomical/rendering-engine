@@ -126,7 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="allocators.cpp" />
+    <ClCompile Include="allocators_test.cpp" />
     <ClCompile Include="backend_called_test.cpp" />
     <ClCompile Include="load_func_test.cpp" />
     <ClCompile Include="main.cpp" />

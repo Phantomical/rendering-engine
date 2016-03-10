@@ -37,3 +37,22 @@ TEST_CASE("test that allocators::linear correctly allocates memory")
 		REQUIRE(mem == nullptr);
 	}
 }
+
+TEST_CASE("test that allocators::standard correctly allocates memory")
+{
+	allocators::standard alloc;
+
+	SECTION("the allocator should return a valid pointer with a valid size")
+	{
+		void* mem = alloc.alloc(128);
+		REQUIRE(mem != nullptr);
+		alloc.dealloc(mem);
+	}
+	SECTION("the allocator should return a null pointer for an allocation with too large of a size")
+	{
+		//Do an allocation with the maximum possible size
+		//No allocator should have enough space for this to work
+		void* mem = alloc.alloc(SIZE_MAX);
+		REQUIRE(mem == nullptr);
+	}
+}
