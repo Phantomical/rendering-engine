@@ -131,8 +131,14 @@ namespace gldr
 				return true;
 			}
 
-		private:
+			bool empty() const
+			{
+				buffer_node_t* tail = LOAD(_tail, memory_order_relaxed);
+				//If the tail is NULL the queue is empty
+				return tail == nullptr;
+			}
 
+		private:
 			struct buffer_node_t
 			{
 				value_type                  data;

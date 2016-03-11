@@ -29,7 +29,7 @@ namespace gl_3_3_backend
 	typedef GLuint rt;
 	struct mesh
 	{
-
+		//TODO: Implement
 	};
 
 	namespace enums
