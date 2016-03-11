@@ -5,24 +5,32 @@
 #include "allocators.h"
 
 #include "gl_core.h"
-#include "sema.h"
+#include "gl_interface.h"
 
 #include <thread>
 
-typedef DefaultSemaphoreType semaphore;
 
 //The amount of threads that will be signaled
 //with a sync or end_frame call. There should never
 //be more than 1 thread waiting on a semaphore for
 //this implementation
 #define SEMA_SIGNAL_COUNT 1
-#define DECLARE_CMD(type) commands::type* cmd = static_cast<commands::type*>(data)
+#define DECLARE_CMD(type) auto cmd = static_cast<commands::type*>(data)
 
-namespace gldr
+namespace gl_3_3_backend
 {
-	struct state;
+	struct buffer
+	{
+		GLuint id;
+		GLenum usage;
+	};
+	typedef GLuint shader;
+	typedef GLuint texture;
+	typedef GLuint rt;
+	struct mesh
+	{
 
-	typedef void(*command_func)(state& state, void* data);
+	};
 
 	namespace enums
 	{
@@ -89,131 +97,6 @@ namespace gldr
 			GL_READ_WRITE
 		};
 	}
-	namespace commands
-	{
-		struct sync
-		{
-			semaphore* sema;
-		};
-		struct end_frame
-		{
-			semaphore* sema;
-		};
-		struct create_buffer
-		{
-			const void* data;
-			size_t size;
-			detail::handle handle;
-			buffer_usage usage;
-		};
-		struct create_shader
-		{
-			const std::pair<shader_stage, std::string>* stages;
-			detail::handle handle;
-			//There is no reason for any shader to have more than 2^16 shaders
-			//There is probably no reason for more than 2^8 but the space isn't
-			//needed in the message so it is ok.
-			uint16_t num_stages;
-		};
-		struct create_texture_2d
-		{
-			void* data;
-			detail::handle handle;
-			//OpenGL 4.1 Mandates a maximum texture size of 16384
-			//so we don't need to use size_t for texture sizes
-			//NOTE: Having values of this size also means that a command is 32 bytes
-			uint16_t width;
-			uint16_t height;
-			internal_format iformat;
-			image_format format;
-			data_type type;
-		};
-		struct create_texture_3d
-		{
-			void* data;
-			detail::handle handle;
-			//For why these are uint16_t see create_texture_2d
-			uint16_t width;
-			uint16_t height;
-			uint16_t depth;
-			internal_format iformat;
-			image_format format;
-			data_type type;
-		};
-		struct create_texture_cubemap
-		{
-			const void** data;
-			detail::handle handle;
-			//For why these are uint16_t see create_texture_2d
-			uint16_t width;
-			uint16_t height;
-			internal_format iformat;
-			image_format format;
-			data_type type;
-		};
-		struct delete_buffer
-		{
-			detail::handle handle;
-		};
-		struct delete_shader
-		{
-			detail::handle handle;
-		};
-		struct delete_texture
-		{
-			detail::handle handle;
-		};
-		struct set_buffer_data
-		{
-			const void* data;
-			GLsizeiptr size;
-			detail::handle handle;
-		};
-	}
-
-	struct command
-	{
-		command_func func;
-
-		union
-		{
-			//Pointer to the data
-			//This will be passed into the function with this command
-			char ptr[1];
-
-			commands::sync sync;
-			commands::end_frame end_frame;
-			commands::create_buffer create_buffer;
-			commands::create_shader create_shader;
-			commands::create_texture_2d create_texture_2d;
-			commands::create_texture_3d create_texture_3d;
-			commands::create_texture_cubemap create_texture_cubemap;
-			commands::delete_buffer delete_buffer;
-			commands::delete_shader delete_shader;
-			commands::delete_texture delete_texture;
-			commands::set_buffer_data set_buffer_data;
-		};
-
-		command()
-		{
-
-		}
-		command(command_func func) :
-			func(func)
-		{
-
-		}
-	};
-
-	constexpr size_t cmdsz = sizeof(command);
-
-	struct buffer
-	{
-		GLuint id;
-		GLenum usage;
-	};
-	typedef GLuint shader;
-	typedef GLuint texture;
 
 	struct state
 	{
@@ -223,6 +106,8 @@ namespace gldr
 		detail::concurrent_ra_array<buffer> buffers;
 		detail::concurrent_ra_array<shader> shaders;
 		detail::concurrent_ra_array<texture> textures;
+		detail::concurrent_ra_array<mesh> meshes;
+		detail::concurrent_ra_array<rt> render_targets;
 
 		std::thread thread;
 
@@ -234,16 +119,44 @@ namespace gldr
 		}
 	};
 
-	void sync_func(state&, void* data)
+	state* global_state = nullptr;
+
+	void enqueue(const command& cmd)
+	{
+		global_state->command_queue.enqueue(cmd);
+	}
+
+	detail::handle alloc_mesh_handle()
+	{
+		return global_state->meshes.alloc();
+	}
+	detail::handle alloc_buffer_handle()
+	{
+		return global_state->buffers.alloc();
+	}
+	detail::handle alloc_shader_handle()
+	{
+		return global_state->shaders.alloc();
+	}
+	detail::handle alloc_texture_handle()
+	{
+		return global_state->textures.alloc();
+	}
+	detail::handle alloc_render_target_handle()
+	{
+		return global_state->render_targets.alloc();
+	}
+
+	void sync(state&, void* data)
 	{
 		typedef commands::sync cmd;
 		cmd* sync = static_cast<cmd*>(data);
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 	}
-	void end_frame_func(state&, void* data)
+	void swap_buffers(state&, void* data)
 	{
-		typedef commands::end_frame cmd;
+		typedef commands::swap_buffers cmd;
 		cmd* sync = static_cast<cmd*>(data);
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
@@ -259,7 +172,7 @@ namespace gldr
 		glBindBuffer(GL_ARRAY_BUFFER, buf.id);
 		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 
-		st.buffers.attach_value(cmd->handle, buf);
+		st.buffers.attach_value(cmd->_handle, buf);
 	}
 	void create_shader(state& st, void* data)
 	{
@@ -271,7 +184,7 @@ namespace gldr
 		shader program = glCreateProgram();
 		for (size_t i = 0; i < cmd->num_stages; ++i)
 		{
-			const char* str = cmd->stages[i].second.c_str();
+			const char* str = cmd->stages[i].second;
 			stages[i] = glCreateShader(enums::shader_stages[(uint8_t)cmd->stages[i].first]);
 			glShaderSource(stages[i], 1, &str, nullptr);
 			glCompileShader(stages[i]);
@@ -290,7 +203,7 @@ namespace gldr
 			glDeleteShader(stages[i]);
 		}
 
-		st.shaders.attach_value(cmd->handle, program);
+		st.shaders.attach_value(cmd->_handle, program);
 	}
 	void create_texture_2d(state& st, void* data)
 	{
@@ -301,7 +214,7 @@ namespace gldr
 		glTexImage2D(GL_TEXTURE_2D, 0, enums::internal_formats[(uint8_t)cmd->iformat],
 			cmd->width, cmd->height, 0, enums::formats[(uint8_t)cmd->format],
 			enums::data_types[(uint8_t)cmd->type], cmd->data);
-		st.textures.attach_value(cmd->handle, id);
+		st.textures.attach_value(cmd->_handle, id);
 	}
 	void create_texture_3d(state& st, void* data)
 	{
@@ -312,7 +225,7 @@ namespace gldr
 		glTexImage3D(GL_TEXTURE_3D, 0, enums::internal_formats[(uint8_t)cmd->iformat],
 			cmd->width, cmd->height, cmd->depth, 0, enums::formats[(uint8_t)cmd->format],
 			enums::data_types[(uint8_t)cmd->type], cmd->data);
-		st.textures.attach_value(cmd->handle, id);
+		st.textures.attach_value(cmd->_handle, id);
 	}
 	void create_texture_cubemap(state& st, void* data)
 	{
@@ -346,48 +259,58 @@ namespace gldr
 			enums::formats[(uint8_t)cmd->format], enums::data_types[(uint8_t)cmd->type],
 			cmd->data[5]);
 
-		st.textures.attach_value(cmd->handle, id);
+		st.textures.attach_value(cmd->_handle, id);
 	}
 
 	void delete_buffer(state& st, void* data)
 	{
 		DECLARE_CMD(delete_buffer);
 
-		GLuint id = st.buffers.at(cmd->handle).id;
+		GLuint id = st.buffers.at(cmd->buffer.handle).id;
 		glDeleteBuffers(1, &id);
-		st.buffers.remove(cmd->handle);
+		st.buffers.remove(cmd->buffer.handle);
 	}
 	void delete_shader(state& st, void* data)
 	{
 		DECLARE_CMD(delete_shader);
 
-		GLuint id = st.shaders.at(cmd->handle);
+		GLuint id = st.shaders.at(cmd->shader.handle);
 		glDeleteProgram(id);
-		st.shaders.remove(cmd->handle);
+		st.shaders.remove(cmd->shader.handle);
 	}
 	void delete_texture(state& st, void* data)
 	{
 		DECLARE_CMD(delete_texture);
 
-		GLuint id = st.buffers.at(cmd->handle).id;
+		GLuint id = st.buffers.at(cmd->image.handle).id;
 		glDeleteBuffers(1, &id);
-		st.buffers.remove(cmd->handle);
+		st.buffers.remove(cmd->image.handle);
 	}
 
 	void set_buffer_data(state& st, void* data)
 	{
 		DECLARE_CMD(set_buffer_data);
 
-		buffer buf = st.buffers.at(cmd->handle);
+		buffer buf = st.buffers.at(cmd->buffer.handle);
 		glBindBuffer(GL_ARRAY_BUFFER, buf.id);
 		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 	}
 
-	state* global_state = nullptr;
+	void create_render_target(state& st, void* data)
+	{
+		//TODO: Implement
+		//This isn't supported yet
+		assert(false);
+	}
+	void delete_render_target(state& st, void* data)
+	{
+		//TODO: Implement
+		//This isn't supported yet
+		assert(false);
+	}
 }
 
-using namespace gldr;
-using detail::handle;
+using namespace gl_3_3_backend;
 
 extern "C" void _init()
 {
@@ -398,25 +321,3 @@ extern "C" void _terminate()
 	delete global_state;
 }
 
-extern "C" void _create_buffer(buffer_handle* _h, size_t size, const void* data, buffer_usage usage)
-{
-	handle h = global_state->buffers.alloc();
-	command cmd{ create_buffer };
-	cmd.create_buffer.size = size;
-	cmd.create_buffer.data = data;
-	cmd.create_buffer.usage = usage;
-	cmd.create_buffer.handle = h;
-	global_state->command_queue.enqueue(cmd);
-	_h->handle = h;
-}
-extern "C" shader_handle _create_shader(size_t num_stages, std::pair<shader_stage, const char*>* stages);
-extern "C" texture_handle _create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
-extern "C" texture_handle _create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
-extern "C" texture_handle _create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data);
-extern "C" void _delete_buffer(buffer_handle buffer);
-extern "C" void _delete_shader(shader_handle shader);
-extern "C" void _delete_texture(texture_handle image);
-extern "C" void _delete_render_target(render_target_handle render_target);
-extern "C" void _set_buffer_data(buffer_handle buffer, size_t size, const void* data);
-extern "C" void _swap_buffers();
-extern "C" void _sync();

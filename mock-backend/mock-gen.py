@@ -101,8 +101,6 @@ write("")
 write("extern \"C\" void EXPORT CALL_CONV _init() { }")
 write("extern \"C\" void EXPORT CALL_CONV _terminate() { }")
 
-write("")
-
 with open(outfile, "w") as f:
     f.write(output)
 

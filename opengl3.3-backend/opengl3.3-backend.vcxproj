@@ -103,6 +103,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(PythonPath) $(ProjectDir)backend-gen.py $(SolutionDir)rendering-engine\dispatcher-gen.xml $(ProjectDir)gl_interface.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -118,6 +121,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(PythonPath) $(ProjectDir)backend-gen.py $(SolutionDir)rendering-engine\dispatcher-gen.xml $(ProjectDir)gl_interface.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -137,6 +143,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(PythonPath) $(ProjectDir)backend-gen.py $(SolutionDir)rendering-engine\dispatcher-gen.xml $(ProjectDir)gl_interface.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -156,6 +165,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(PythonPath) $(ProjectDir)backend-gen.py $(SolutionDir)rendering-engine\dispatcher-gen.xml $(ProjectDir)gl_interface.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -178,9 +190,13 @@
   <ItemGroup>
     <ClInclude Include="concurrent_array.h" />
     <ClInclude Include="gl_core.h" />
+    <ClInclude Include="gl_interface.h" />
     <ClInclude Include="mpsc_queue.h" />
     <ClInclude Include="packed_array.h" />
     <ClInclude Include="sema.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="backend-gen.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

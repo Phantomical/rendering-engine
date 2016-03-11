@@ -41,5 +41,11 @@
     <ClInclude Include="sema.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gl_interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="backend-gen.py" />
   </ItemGroup>
 </Project>

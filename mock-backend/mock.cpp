@@ -78,4 +78,3 @@ extern "C" void EXPORT CALL_CONV _sync()
 
 extern "C" void EXPORT CALL_CONV _init() { }
 extern "C" void EXPORT CALL_CONV _terminate() { }
-
