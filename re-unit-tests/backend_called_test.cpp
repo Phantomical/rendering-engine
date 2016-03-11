@@ -30,11 +30,12 @@ TEST_CASE("backend methods are called correctly when the backend interface metho
 	TEST_BACKEND_METHOD(create_texture_3d, 0, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, nullptr);
 	TEST_BACKEND_METHOD(create_texture_cubemap, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, nullptr);
 	TEST_BACKEND_METHOD(create_texture_cubemap, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, array)
+	TEST_BACKEND_METHOD(delete_mesh, mesh_handle());
 	TEST_BACKEND_METHOD(delete_buffer, buffer_handle());
 	TEST_BACKEND_METHOD(delete_shader, shader_handle());
 	TEST_BACKEND_METHOD(delete_texture, texture_handle());
 	TEST_BACKEND_METHOD(delete_render_target, render_target_handle());
-	TEST_BACKEND_METHOD(set_buffer_data, buffer_handle(), 0, nullptr)
-	TEST_BACKEND_METHOD(sync);;
+	TEST_BACKEND_METHOD(set_buffer_data, buffer_handle(), 0, nullptr);
+	TEST_BACKEND_METHOD(sync);
 	TEST_BACKEND_METHOD(swap_buffers);
 }

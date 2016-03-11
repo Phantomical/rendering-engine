@@ -16,7 +16,7 @@ namespace gldr
 	typedef void(CALL_CONV*create_texture_3d_proc)(texture_handle*, uint16_t arg0, uint16_t arg1, uint16_t arg2, internal_format arg3, image_format arg4, data_type arg5, const void* arg6);
 	typedef void(CALL_CONV*create_texture_cubemap_proc)(texture_handle*, uint16_t arg0, uint16_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* const* arg5);
 	typedef void(CALL_CONV*create_render_target_proc)(render_target_handle*);
-	typedef void(CALL_CONV*create_mesh_proc)(mesh_handle*, size_t arg0, buffer_handle* arg1);
+	typedef void(CALL_CONV*create_mesh_proc)(mesh_handle*, size_t arg0, std::pair<unsigned, buffer_handle>* arg1, size_t arg2, buffer_layout* arg3);
 	typedef void(CALL_CONV*delete_buffer_proc)(buffer_handle arg0);
 	typedef void(CALL_CONV*delete_shader_proc)(shader_handle arg0);
 	typedef void(CALL_CONV*delete_texture_proc)(texture_handle arg0);
@@ -88,10 +88,10 @@ namespace gldr
 		_state->create_render_target_func(&_retval);
 		return _retval;
 	}
-	mesh_handle backend::create_mesh(size_t arg0, buffer_handle* arg1)
+	mesh_handle backend::create_mesh(size_t arg0, std::pair<unsigned, buffer_handle>* arg1, size_t arg2, buffer_layout* arg3)
 	{
 		mesh_handle _retval;
-		_state->create_mesh_func(&_retval, arg0, arg1);
+		_state->create_mesh_func(&_retval, arg0, arg1, arg2, arg3);
 		return _retval;
 	}
 	void backend::delete_buffer(buffer_handle arg0)

@@ -7,6 +7,7 @@
 #include <utility>
 #include <string>
 #include <array>
+#include <cstdint>
 
 #define GLDR_DECLARE_HANDLE(name) struct name { detail::handle handle; name() = default; name(const detail::handle& h) : handle(h) { } }
 //This is the calling convention that MUST be used when creating renderer backends
@@ -87,6 +88,15 @@ namespace gldr
 		FLOAT,
 	};
 	
+	struct buffer_layout
+	{
+		unsigned index;
+		uint8_t size;
+		bool normalized;
+		size_t stride;
+		size_t offset;
+	};
+	
 	class backend
 	{
 	private:
@@ -113,7 +123,7 @@ namespace gldr
 		texture_handle create_texture_cubemap(uint16_t width, uint16_t height, internal_format iformat, image_format format, data_type type, const std::array<const void*, 6>& data);
 		texture_handle create_texture_cubemap(uint16_t width, uint16_t height, internal_format iformat, image_format format, data_type type, const void* const* data);
 		render_target_handle create_render_target();
-		mesh_handle create_mesh(size_t num_buffers, buffer_handle* handles);
+		mesh_handle create_mesh(size_t num_buffers, std::pair<unsigned, buffer_handle>* handles, size_t num_layouts, buffer_layout* layouts);
 		void delete_buffer(buffer_handle buffer);
 		void delete_shader(shader_handle shader);
 		void delete_texture(texture_handle image);

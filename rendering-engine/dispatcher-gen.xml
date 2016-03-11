@@ -5,6 +5,7 @@
   <lib-include>utility</lib-include>
   <lib-include>string</lib-include>
   <lib-include>array</lib-include>
+  <lib-include>cstdint</lib-include>
 
   <handle type="mesh_handle"/>
   <handle type="buffer_handle"/>
@@ -69,6 +70,14 @@
     <value name="FLOAT"/>
   </enum>
 
+  <struct name="buffer_layout">
+    <member type="unsigned" name="index"/>
+    <member type="uint8_t" name="size"/>
+    <member type="bool" name="normalized"/>
+    <member type="size_t" name="stride"/>
+    <member type="size_t" name="offset"/>
+  </struct>
+
   <function name="create_buffer">
     <return type="buffer_handle"/>
     <arg type="size_t" name="size"/>
@@ -130,8 +139,9 @@
   <function name="create_mesh">
     <return type="mesh_handle"/>
     <arg type="size_t" name="num_buffers"/>
-    <arg type="buffer_handle*" name="handles"/>
-    
+    <arg type="std::pair&lt;unsigned, buffer_handle&gt;*" name="handles"/>
+    <arg type="size_t" name="num_layouts"/>
+    <arg type="buffer_layout*" name="layouts"/>
   </function>
 
   <function name="delete_buffer">

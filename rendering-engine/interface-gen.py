@@ -82,6 +82,26 @@ for enum in root.findall("enum"):
 
 write("")
 
+for struct in root.findall("struct"):
+    name = struct.get("name")
+    if name == None:
+        print("Invalid struct declaration detected")
+        continue
+    write("struct " + name)
+    write("{")
+    level += 1
+    for member in struct.findall("member"):
+        type = member.get("type")
+        memname = member.get("name")
+        if type == None or memname == None:
+            print("Invalid member declaration detected in " + name)
+            continue
+        write(type + " " + memname + ";")
+    level -= 1
+    write("};")
+
+write("")
+
 write("class backend")
 write("{")
 write("private:")

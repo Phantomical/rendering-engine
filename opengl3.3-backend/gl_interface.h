@@ -136,7 +136,9 @@ namespace gl_3_3_backend
 		struct create_mesh
 		{
 			size_t num_buffers;
-			buffer_handle* handles;
+			std::pair<unsigned, buffer_handle>* handles;
+			size_t num_layouts;
+			buffer_layout* layouts;
 			detail::handle _handle;
 		};
 		struct delete_buffer
@@ -296,12 +298,14 @@ extern "C" void _create_render_target(render_target_handle* _retval)
 	_retval->handle = _handle;
 	enqueue(cmd);
 }
-extern "C" void _create_mesh(mesh_handle* _retval, size_t num_buffers, buffer_handle* handles)
+extern "C" void _create_mesh(mesh_handle* _retval, size_t num_buffers, std::pair<unsigned, buffer_handle>* handles, size_t num_layouts, buffer_layout* layouts)
 {
 	handle _handle = alloc_mesh_handle();
 	command cmd(create_mesh);
 	cmd.create_mesh.num_buffers = num_buffers;
 	cmd.create_mesh.handles = handles;
+	cmd.create_mesh.num_layouts = num_layouts;
+	cmd.create_mesh.layouts = layouts;
 	cmd.create_mesh._handle = _handle;
 	_retval->handle = _handle;
 	enqueue(cmd);
