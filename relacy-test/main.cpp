@@ -41,6 +41,8 @@ struct queue_test : rl::test_suite<queue_test, 4>
 int main(int, const char*)
 {
 	rl::test_params params;
-	params.search_type = rl::sched_full;
+	//For most test we don't need to search everything
+	//params.search_type = rl::sched_full;
+	params.iteration_count = 500000;
 	return rl::simulate<queue_test>(params) ? 0 : 1;
 }
