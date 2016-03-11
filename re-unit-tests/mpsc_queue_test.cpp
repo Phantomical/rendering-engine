@@ -21,4 +21,9 @@ TEST_CASE("test that all items can be dequeued from the queue with basic types")
 	{
 		REQUIRE(queue.empty());
 	}
+	SECTION("test that a non-empty queue indicates that is isn't empty")
+	{
+		queue.enqueue(1.0);
+		REQUIRE(!queue.empty());
+	}
 }
