@@ -89,7 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend;$(SolutionDir)rendering-engine;$(SolutionDir)opengl3.3-backend</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
@@ -104,7 +104,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend;$(SolutionDir)rendering-engine;$(SolutionDir)opengl3.3-backend</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
@@ -121,7 +121,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend;$(SolutionDir)rendering-engine;$(SolutionDir)opengl3.3-backend</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -140,7 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend; $(SolutionDir)rendering-engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)mock-backend;$(SolutionDir)rendering-engine;$(SolutionDir)opengl3.3-backend</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -157,6 +157,7 @@
     <ClCompile Include="backend_called_test.cpp" />
     <ClCompile Include="load_func_test.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mpsc_queue_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catch.hpp" />

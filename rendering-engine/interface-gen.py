@@ -63,7 +63,7 @@ for enum in root.findall("enum"):
     if name == None:
         print("Invalid enum declaration detected")
     else:
-        write("enum " + name)
+        write("enum " + name + ' : uint8_t')
         write("{")
         level += 1
         for value in enum.findall("value"):

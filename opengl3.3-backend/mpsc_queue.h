@@ -114,7 +114,7 @@ namespace gldr
 				STORE(prev_head->next, node, memory_order_release);
 				return true;
 			}
-			//Attempts to dequeue an item. Returns false if it failed returns true and places the result in output otherwise
+			//Attempts to dequeue an item. Returns false if it failed, returns true and places the result in output otherwise
 			bool try_dequeue(value_type& output)
 			{
 				buffer_node_t* tail = LOAD(_tail, memory_order_relaxed);
@@ -134,8 +134,10 @@ namespace gldr
 			bool empty() const
 			{
 				buffer_node_t* tail = LOAD(_tail, memory_order_relaxed);
+				buffer_node_t* next = LOAD(tail->next, memory_order_acquire);
+
 				//If the tail is NULL the queue is empty
-				return tail == nullptr;
+				return next == nullptr;
 			}
 
 		private:

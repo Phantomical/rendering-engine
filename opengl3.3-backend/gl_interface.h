@@ -20,7 +20,7 @@ namespace gl_3_3_backend
 	typedef void(*command_func)(state& state, void* data);
 	namespace enums
 	{
-		enum shader_stage
+		enum shader_stage : uint8_t
 		{
 			VERTEX,
 			FRAGMENT,
@@ -29,13 +29,13 @@ namespace gl_3_3_backend
 			TESS_CONTROL,
 			COMPUTE,
 		};
-		enum buffer_access_flags
+		enum buffer_access_flags : uint8_t
 		{
 			READ = 0x1,
 			WRITE = 0x2,
 			READ_WRITE = READ | WRITE,
 		};
-		enum buffer_usage
+		enum buffer_usage : uint8_t
 		{
 			STREAM_DRAW,
 			STREAM_READ,
@@ -47,7 +47,7 @@ namespace gl_3_3_backend
 			DYNAMIC_READ,
 			DYNAMIC_COPY,
 		};
-		enum internal_format
+		enum internal_format : uint8_t
 		{
 			R8,
 			RG8,
@@ -58,7 +58,7 @@ namespace gl_3_3_backend
 			RGB32F,
 			RGBA32F,
 		};
-		enum image_format
+		enum image_format : uint8_t
 		{
 			RED,
 			GREEN,
@@ -72,7 +72,7 @@ namespace gl_3_3_backend
 			STENCIL_INDEX,
 			DEPTH_STENCIL,
 		};
-		enum data_type
+		enum data_type : uint8_t
 		{
 			UNSIGNED_BYTE,
 			UNSIGNED_SHORT,
