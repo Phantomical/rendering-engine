@@ -87,8 +87,8 @@
   </function>
   <function name="create_texture_2d">
     <return type="texture_handle"/>
-    <arg type="size_t" name="width"/>
-    <arg type="size_t" name="height"/>
+    <arg type="uint16_t" name="width"/>
+    <arg type="uint16_t" name="height"/>
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
     <arg type="data_type" name="type"/>
@@ -96,9 +96,9 @@
   </function>
   <function name="create_texture_3d">
     <return type="texture_handle"/>
-    <arg type="size_t" name="width"/>
-    <arg type="size_t" name="height"/>
-    <arg type="size_t" name="depth"/>
+    <arg type="uint16_t" name="width"/>
+    <arg type="uint16_t" name="height"/>
+    <arg type="uint16_t" name="depth"/>
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
     <arg type="data_type" name="type"/>
@@ -106,8 +106,8 @@
   </function>
   <function name="create_texture_cubemap">
     <return type="texture_handle"/>
-    <arg type="size_t" name="width"/>
-    <arg type="size_t" name="height"/>
+    <arg type="uint16_t" name="width"/>
+    <arg type="uint16_t" name="height"/>
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
     <arg type="data_type" name="type"/>
@@ -116,8 +116,8 @@
   </function>
   <function name="create_texture_cubemap">
     <return type="texture_handle"/>
-    <arg type="size_t" name="width"/>
-    <arg type="size_t" name="height"/>
+    <arg type="uint16_t" name="width"/>
+    <arg type="uint16_t" name="height"/>
     <arg type="internal_format" name="iformat"/>
     <arg type="image_format" name="format"/>
     <arg type="data_type" name="type"/>
@@ -126,6 +126,12 @@
   <function name="create_render_target">
     <return type="render_target_handle"/>
     <!-- TODO: Figure out arguments for this -->
+  </function>
+  <function name="create_mesh">
+    <return type="mesh_handle"/>
+    <arg type="size_t" name="num_buffers"/>
+    <arg type="buffer_handle*" name="handles"/>
+    
   </function>
 
   <function name="delete_buffer">
@@ -143,6 +149,10 @@
   <function name="delete_render_target">
     <return type="void"/>
     <arg type="render_target_handle" name="render_target"/>
+  </function>
+  <function name="delete_mesh">
+    <return type="void"/>
+    <arg type="mesh_handle" name="mesh"/>
   </function>
   <function name="set_buffer_data">
     <return type="void"/>

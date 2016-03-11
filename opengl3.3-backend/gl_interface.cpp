@@ -27,10 +27,7 @@ namespace gl_3_3_backend
 	typedef GLuint shader;
 	typedef GLuint texture;
 	typedef GLuint rt;
-	struct mesh
-	{
-		//TODO: Implement
-	};
+	typedef GLuint mesh;
 
 	namespace enums
 	{
@@ -162,6 +159,12 @@ namespace gl_3_3_backend
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 	}
 
+	void create_mesh(state& st, void* data)
+	{
+		DECLARE_CMD(create_mesh);
+
+		GLuint vao;
+	}
 	void create_buffer(state& st, void* data)
 	{
 		DECLARE_CMD(create_buffer);
@@ -285,6 +288,12 @@ namespace gl_3_3_backend
 		GLuint id = st.buffers.at(cmd->image.handle).id;
 		glDeleteBuffers(1, &id);
 		st.buffers.remove(cmd->image.handle);
+	}
+	void delete_mesh(state& st, void* data)
+	{
+		DECLARE_CMD(delete_mesh);
+
+		//TODO: Implement
 	}
 
 	void set_buffer_data(state& st, void* data)

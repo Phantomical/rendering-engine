@@ -100,8 +100,8 @@ namespace gl_3_3_backend
 		};
 		struct create_texture_2d
 		{
-			size_t width;
-			size_t height;
+			uint16_t width;
+			uint16_t height;
 			internal_format iformat;
 			image_format format;
 			data_type type;
@@ -110,9 +110,9 @@ namespace gl_3_3_backend
 		};
 		struct create_texture_3d
 		{
-			size_t width;
-			size_t height;
-			size_t depth;
+			uint16_t width;
+			uint16_t height;
+			uint16_t depth;
 			internal_format iformat;
 			image_format format;
 			data_type type;
@@ -121,8 +121,8 @@ namespace gl_3_3_backend
 		};
 		struct create_texture_cubemap
 		{
-			size_t width;
-			size_t height;
+			uint16_t width;
+			uint16_t height;
 			internal_format iformat;
 			image_format format;
 			data_type type;
@@ -131,6 +131,12 @@ namespace gl_3_3_backend
 		};
 		struct create_render_target
 		{
+			detail::handle _handle;
+		};
+		struct create_mesh
+		{
+			size_t num_buffers;
+			buffer_handle* handles;
 			detail::handle _handle;
 		};
 		struct delete_buffer
@@ -148,6 +154,10 @@ namespace gl_3_3_backend
 		struct delete_render_target
 		{
 			render_target_handle render_target;
+		};
+		struct delete_mesh
+		{
+			mesh_handle mesh;
 		};
 		struct set_buffer_data
 		{
@@ -177,10 +187,12 @@ namespace gl_3_3_backend
 			commands::create_texture_3d create_texture_3d;
 			commands::create_texture_cubemap create_texture_cubemap;
 			commands::create_render_target create_render_target;
+			commands::create_mesh create_mesh;
 			commands::delete_buffer delete_buffer;
 			commands::delete_shader delete_shader;
 			commands::delete_texture delete_texture;
 			commands::delete_render_target delete_render_target;
+			commands::delete_mesh delete_mesh;
 			commands::set_buffer_data set_buffer_data;
 			commands::swap_buffers swap_buffers;
 			commands::sync sync;
@@ -200,10 +212,12 @@ namespace gl_3_3_backend
 	void create_texture_3d(state&, void*);
 	void create_texture_cubemap(state&, void*);
 	void create_render_target(state&, void*);
+	void create_mesh(state&, void*);
 	void delete_buffer(state&, void*);
 	void delete_shader(state&, void*);
 	void delete_texture(state&, void*);
 	void delete_render_target(state&, void*);
+	void delete_mesh(state&, void*);
 	void set_buffer_data(state&, void*);
 	void swap_buffers(state&, void*);
 	void sync(state&, void*);
@@ -231,7 +245,7 @@ extern "C" void _create_shader(shader_handle* _retval, size_t num_stages, const 
 	_retval->handle = _handle;
 	enqueue(cmd);
 }
-extern "C" void _create_texture_2d(texture_handle* _retval, size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data)
+extern "C" void _create_texture_2d(texture_handle* _retval, uint16_t width, uint16_t height, internal_format iformat, image_format format, data_type type, const void* data)
 {
 	handle _handle = alloc_texture_handle();
 	command cmd(create_texture_2d);
@@ -245,7 +259,7 @@ extern "C" void _create_texture_2d(texture_handle* _retval, size_t width, size_t
 	_retval->handle = _handle;
 	enqueue(cmd);
 }
-extern "C" void _create_texture_3d(texture_handle* _retval, size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data)
+extern "C" void _create_texture_3d(texture_handle* _retval, uint16_t width, uint16_t height, uint16_t depth, internal_format iformat, image_format format, data_type type, const void* data)
 {
 	handle _handle = alloc_texture_handle();
 	command cmd(create_texture_3d);
@@ -260,7 +274,7 @@ extern "C" void _create_texture_3d(texture_handle* _retval, size_t width, size_t
 	_retval->handle = _handle;
 	enqueue(cmd);
 }
-extern "C" void _create_texture_cubemap(texture_handle* _retval, size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data)
+extern "C" void _create_texture_cubemap(texture_handle* _retval, uint16_t width, uint16_t height, internal_format iformat, image_format format, data_type type, const void* const* data)
 {
 	handle _handle = alloc_texture_handle();
 	command cmd(create_texture_cubemap);
@@ -279,6 +293,16 @@ extern "C" void _create_render_target(render_target_handle* _retval)
 	handle _handle = alloc_render_target_handle();
 	command cmd(create_render_target);
 	cmd.create_render_target._handle = _handle;
+	_retval->handle = _handle;
+	enqueue(cmd);
+}
+extern "C" void _create_mesh(mesh_handle* _retval, size_t num_buffers, buffer_handle* handles)
+{
+	handle _handle = alloc_mesh_handle();
+	command cmd(create_mesh);
+	cmd.create_mesh.num_buffers = num_buffers;
+	cmd.create_mesh.handles = handles;
+	cmd.create_mesh._handle = _handle;
 	_retval->handle = _handle;
 	enqueue(cmd);
 }
@@ -304,6 +328,12 @@ extern "C" void _delete_render_target(render_target_handle render_target)
 {
 	command cmd(delete_render_target);
 	cmd.delete_render_target.render_target = render_target;
+	enqueue(cmd);
+}
+extern "C" void _delete_mesh(mesh_handle mesh)
+{
+	command cmd(delete_mesh);
+	cmd.delete_mesh.mesh = mesh;
 	enqueue(cmd);
 }
 extern "C" void _set_buffer_data(buffer_handle buffer, size_t size, const void* data)

@@ -30,7 +30,7 @@ namespace gldr
 
 		return create_shader(stages.size(), array);
 	}
-	texture_handle backend::create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const std::array<const void*, 6>& data)
+	texture_handle backend::create_texture_cubemap(uint16_t width, uint16_t height, internal_format iformat, image_format format, data_type type, const std::array<const void*, 6>& data)
 	{
 		auto buf = (const void**)allocator()->alloc(sizeof(const void*) * 6);
 		memcpy(buf, data.data(), sizeof(const void*) * 6);

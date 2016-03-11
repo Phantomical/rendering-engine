@@ -15,10 +15,12 @@ __declspec(dllexport) size_t create_texture_2d_called = 0;
 __declspec(dllexport) size_t create_texture_3d_called = 0;
 __declspec(dllexport) size_t create_texture_cubemap_called = 0;
 __declspec(dllexport) size_t create_render_target_called = 0;
+__declspec(dllexport) size_t create_mesh_called = 0;
 __declspec(dllexport) size_t delete_buffer_called = 0;
 __declspec(dllexport) size_t delete_shader_called = 0;
 __declspec(dllexport) size_t delete_texture_called = 0;
 __declspec(dllexport) size_t delete_render_target_called = 0;
+__declspec(dllexport) size_t delete_mesh_called = 0;
 __declspec(dllexport) size_t set_buffer_data_called = 0;
 __declspec(dllexport) size_t swap_buffers_called = 0;
 __declspec(dllexport) size_t sync_called = 0;
@@ -47,6 +49,10 @@ extern "C" void EXPORT CALL_CONV _create_render_target(render_target_handle* _re
 {
 	create_render_target_called++;
 }
+extern "C" void EXPORT CALL_CONV _create_mesh(mesh_handle* _retval)
+{
+	create_mesh_called++;
+}
 extern "C" void EXPORT CALL_CONV _delete_buffer(buffer_handle arg0)
 {
 	delete_buffer_called++;
@@ -62,6 +68,10 @@ extern "C" void EXPORT CALL_CONV _delete_texture(texture_handle arg0)
 extern "C" void EXPORT CALL_CONV _delete_render_target(render_target_handle arg0)
 {
 	delete_render_target_called++;
+}
+extern "C" void EXPORT CALL_CONV _delete_mesh(mesh_handle arg0)
+{
+	delete_mesh_called++;
 }
 extern "C" void EXPORT CALL_CONV _set_buffer_data(buffer_handle arg0, size_t arg1, const void* arg2)
 {
