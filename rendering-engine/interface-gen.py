@@ -72,7 +72,18 @@ for libinc in root.findall("lib-include"):
     write("#include <" + libinc.text + ">")
 
 write("")
-write("#define " + namespace.upper() + "_DECLARE_HANDLE(name) struct name { detail::handle handle; name() = default; name(const detail::handle& h) : handle(h) { } }")
+write("#define " + namespace.upper() + "_DECLARE_HANDLE(name) \\")
+level += 2
+write("struct name { \\")
+level += 1
+write("detail::handle handle; \\")
+write("name() = default; \\")
+write("name(const detail::handle& h) : handle(h) { } \\")
+write("bool operator ==(const name& o) { return handle == o.handle; } \\")
+write("bool operator !=(const name& o) { return handle != o.handle; } \\")
+level -= 1
+write("}")
+level -= 2
 #On windows we need to specify the calling convention of the backend
 #so we don't have the backend using a different calling convention
 write("//This is the calling convention that MUST be used when creating renderer backends")
@@ -179,16 +190,20 @@ for func in root.findall("function"):
     decl = rettype + " " + name + "("
     cond = False
     for arg in func.findall("arg"):
-       type = arg.get("type")
-       name = arg.get("name", "")
-       if type == None:
-           print("Invalid argument declaration in function " + name)
-           continue
-       if cond:
-          decl += ", "
-       else:
-           cond = True
-       decl += type + " " + name
+        type = arg.get("type")
+        name = arg.get("name", "")
+        default = arg.get("default")
+        if type == None:
+            print("Invalid argument declaration in function " + name)
+            continue
+        if cond:
+           decl += ", "
+        else:
+            cond = True
+        if default == None:
+            decl += type + " " + name
+        else:
+            decl += type + " " + name + " = " + default
     write(decl + ");")
 
 level -= 1
