@@ -323,7 +323,8 @@ namespace gl_3_3_backend
 	{
 		DECLARE_CMD(delete_mesh);
 
-		//TODO: Implement
+		mesh m = st.meshes.at(cmd->mesh.handle);
+		glDeleteVertexArrays(1, &m);
 	}
 
 	void set_buffer_data(state& st, void* data)
