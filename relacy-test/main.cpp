@@ -43,7 +43,7 @@ int main(int, const char*)
 {
 	rl::test_params params;
 	//For most test we don't need to search everything
-	params.search_type = rl::sched_full;
+	//params.search_type = rl::sched_full;
 	params.iteration_count = 100000;
 	return rl::simulate<queue_test>(params) ? 0 : 1;
 }
