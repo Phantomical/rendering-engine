@@ -20,6 +20,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "re-unit-tests", "re-unit-te
 		{9E1E4780-5FF9-4485-8915-99C1ABDAEB18} = {9E1E4780-5FF9-4485-8915-99C1ABDAEB18}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "relacy-test", "relacy-test\relacy-test.vcxproj", "{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -60,6 +62,14 @@ Global
 		{8DAA33CD-B270-4878-8C06-2550AC828B9C}.Release|x64.Build.0 = Release|x64
 		{8DAA33CD-B270-4878-8C06-2550AC828B9C}.Release|x86.ActiveCfg = Release|Win32
 		{8DAA33CD-B270-4878-8C06-2550AC828B9C}.Release|x86.Build.0 = Release|Win32
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Debug|x64.ActiveCfg = Debug|x64
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Debug|x64.Build.0 = Debug|x64
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Debug|x86.ActiveCfg = Debug|Win32
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Debug|x86.Build.0 = Debug|Win32
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Release|x64.ActiveCfg = Release|x64
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Release|x64.Build.0 = Release|x64
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Release|x86.ActiveCfg = Release|Win32
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +77,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9755AA42-2139-4238-B110-D8E258496C6A} = {DBB9DFE5-CC35-47AB-8CAC-6D420DF47B34}
 		{8DAA33CD-B270-4878-8C06-2550AC828B9C} = {DBB9DFE5-CC35-47AB-8CAC-6D420DF47B34}
+		{EAC8C724-CDDC-40F9-A148-1A6303F6FE0F} = {DBB9DFE5-CC35-47AB-8CAC-6D420DF47B34}
 	EndGlobalSection
 EndGlobal

@@ -133,8 +133,8 @@
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
-python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
+      <Command>$(PythonPath) $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+$(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,8 +158,8 @@ python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
-python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
+      <Command>$(PythonPath) $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+$(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -187,8 +187,8 @@ python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
-python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
+      <Command>$(PythonPath) $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+$(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -216,8 +216,8 @@ python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command
       </Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
-python $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
+      <Command>$(PythonPath) $(ProjectDir)interface-gen.py dispatcher-gen.xml interface.h
+$(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
