@@ -8,7 +8,7 @@
 #include <string>
 #include <array>
 
-#define GLDR_DECLARE_HANDLE(name) struct name { detail::handle handle; }
+#define GLDR_DECLARE_HANDLE(name) struct name { detail::handle handle; name() = default; name(const detail::handle& h) : handle(h) { } }
 //This is the calling convention that MUST be used when creating renderer backends
 #ifdef _WIN32
 #	define GLDR_BACKEND_CALL_CONV __cdecl
@@ -106,7 +106,7 @@ namespace gldr
 		bool is_valid() const;
 		
 		buffer_handle create_buffer(size_t size, const void* data, buffer_usage usage);
-		shader_handle create_shader(size_t num_stages, std::pair<shader_stage, const char*>* stages);
+		shader_handle create_shader(size_t num_stages, const std::pair<shader_stage, const char*>* stages);
 		shader_handle create_shader(const std::initializer_list<std::pair<shader_stage, const char*>>& stages);
 		texture_handle create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
 		texture_handle create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);

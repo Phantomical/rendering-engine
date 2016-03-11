@@ -101,14 +101,14 @@ namespace gldr
 		};
 		struct create_buffer
 		{
-			void* data;
+			const void* data;
 			size_t size;
 			detail::handle handle;
 			buffer_usage usage;
 		};
 		struct create_shader
 		{
-			std::pair<shader_stage, std::string>* stages;
+			const std::pair<shader_stage, std::string>* stages;
 			detail::handle handle;
 			//There is no reason for any shader to have more than 2^16 shaders
 			//There is probably no reason for more than 2^8 but the space isn't
@@ -193,6 +193,16 @@ namespace gldr
 			commands::delete_texture delete_texture;
 			commands::set_buffer_data set_buffer_data;
 		};
+
+		command()
+		{
+
+		}
+		command(command_func func) :
+			func(func)
+		{
+
+		}
 	};
 
 	constexpr size_t cmdsz = sizeof(command);
@@ -215,6 +225,13 @@ namespace gldr
 		detail::concurrent_ra_array<texture> textures;
 
 		std::thread thread;
+
+		state() :
+			alloc(1 << 16),
+			command_queue(&alloc)
+		{
+
+		}
 	};
 
 	void sync_func(state&, void* data)
@@ -365,4 +382,41 @@ namespace gldr
 		glBindBuffer(GL_ARRAY_BUFFER, buf.id);
 		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 	}
+
+	state* global_state = nullptr;
 }
+
+using namespace gldr;
+using detail::handle;
+
+extern "C" void _init()
+{
+	global_state = new state;
+}
+extern "C" void _terminate()
+{
+	delete global_state;
+}
+
+extern "C" void _create_buffer(buffer_handle* _h, size_t size, const void* data, buffer_usage usage)
+{
+	handle h = global_state->buffers.alloc();
+	command cmd{ create_buffer };
+	cmd.create_buffer.size = size;
+	cmd.create_buffer.data = data;
+	cmd.create_buffer.usage = usage;
+	cmd.create_buffer.handle = h;
+	global_state->command_queue.enqueue(cmd);
+	_h->handle = h;
+}
+extern "C" shader_handle _create_shader(size_t num_stages, std::pair<shader_stage, const char*>* stages);
+extern "C" texture_handle _create_texture_2d(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* data);
+extern "C" texture_handle _create_texture_3d(size_t width, size_t height, size_t depth, internal_format iformat, image_format format, data_type type, const void* data);
+extern "C" texture_handle _create_texture_cubemap(size_t width, size_t height, internal_format iformat, image_format format, data_type type, const void* const* data);
+extern "C" void _delete_buffer(buffer_handle buffer);
+extern "C" void _delete_shader(shader_handle shader);
+extern "C" void _delete_texture(texture_handle image);
+extern "C" void _delete_render_target(render_target_handle render_target);
+extern "C" void _set_buffer_data(buffer_handle buffer, size_t size, const void* data);
+extern "C" void _swap_buffers();
+extern "C" void _sync();

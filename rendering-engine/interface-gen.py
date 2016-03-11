@@ -35,7 +35,7 @@ for libinc in root.findall("lib-include"):
     write("#include <" + libinc.text + ">")
 
 write("")
-write("#define " + namespace.upper() + "_DECLARE_HANDLE(name) struct name { detail::handle handle; }")
+write("#define " + namespace.upper() + "_DECLARE_HANDLE(name) struct name { detail::handle handle; name() = default; name(const detail::handle& h) : handle(h) { } }")
 #On windows we need to specify the calling convention of the backend
 #so we don't have the backend using a different calling convention
 write("//This is the calling convention that MUST be used when creating renderer backends")

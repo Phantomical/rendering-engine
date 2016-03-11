@@ -82,7 +82,13 @@ for func in root.findall("function"):
 
 #declare typedefs
 for func in funcs:
-    write("typedef " + func.rettype + "(CALL_CONV*" + func.name + "_proc)(" + func.args + ");")
+    if func.rettype == "void":
+        write("typedef " + func.rettype + "(CALL_CONV*" + func.name + "_proc)(" + func.args + ");")
+    else:
+        args = ""
+        if func.nargs != 0:
+            args = ", " + func.args
+        write("typedef void(CALL_CONV*" + func.name + "_proc)(" + func.rettype + "*" + args + ");")
 
 write("")
 write("struct backend::state")
@@ -108,11 +114,11 @@ write("")
 
 #declare prototypes
 for func in funcs:
+    cond = False
+    decl = ""
     write(func.rettype + " backend::" + func.name + "(" + func.args + ")")
     write("{")
     level += 1
-    cond = False
-    decl = ""
     for i in range(func.nargs):
         if cond:
             decl += ", "
@@ -127,7 +133,15 @@ for func in funcs:
         write("~cb() { f(); }")
         level -= 1
         write("} c([=](){ this->sync_callback(); });")
-    write("return _state->" + func.name + "_func(" + decl + ");")
+    if func.rettype == "void":
+        write("_state->" + func.name + "_func(" + decl + ");")
+    else:
+        write(func.rettype + " _retval;")
+        if func.nargs == 0:
+            write("_state->" + func.name + "_func(&_retval);")
+        else:
+            write("_state->" + func.name + "_func(&_retval, " + decl + ");")
+        write("return _retval;")
     level -= 1
     write("}")
 

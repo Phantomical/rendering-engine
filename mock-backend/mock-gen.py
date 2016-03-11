@@ -84,14 +84,20 @@ for func in funcs:
 write("")
 
 for func in funcs:
-    write("extern \"C\" " + func.rettype + " EXPORT CALL_CONV _" + func.name + "(" + func.args + ")")
+    if func.rettype == "void":
+        write("extern \"C\" void EXPORT CALL_CONV _" + func.name + "(" + func.args + ")")
+    else:
+        argc = ""
+        if func.nargs != 0:
+            argc = ", " + func.args;
+        write("extern \"C\" void EXPORT CALL_CONV _" + func.name + "("+ func.rettype + "* _retval" + args + ")")
     write("{")
     level += 1
     write(func.name + "_called++;")
-    write("return " + func.rettype + "();")
     level -= 1
     write("}")
 
+write("")
 write("extern \"C\" void EXPORT CALL_CONV _init() { }")
 write("extern \"C\" void EXPORT CALL_CONV _terminate() { }")
 

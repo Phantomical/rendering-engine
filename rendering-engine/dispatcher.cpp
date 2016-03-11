@@ -10,12 +10,12 @@ void load_terminate(void*);
 
 namespace gldr
 {
-	typedef buffer_handle(CALL_CONV*create_buffer_proc)(size_t arg0, const void* arg1, buffer_usage arg2);
-	typedef shader_handle(CALL_CONV*create_shader_proc)(size_t arg0, std::pair<shader_stage, const char*>* arg1);
-	typedef texture_handle(CALL_CONV*create_texture_2d_proc)(size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* arg5);
-	typedef texture_handle(CALL_CONV*create_texture_3d_proc)(size_t arg0, size_t arg1, size_t arg2, internal_format arg3, image_format arg4, data_type arg5, const void* arg6);
-	typedef texture_handle(CALL_CONV*create_texture_cubemap_proc)(size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* const* arg5);
-	typedef render_target_handle(CALL_CONV*create_render_target_proc)();
+	typedef void(CALL_CONV*create_buffer_proc)(buffer_handle*, size_t arg0, const void* arg1, buffer_usage arg2);
+	typedef void(CALL_CONV*create_shader_proc)(shader_handle*, size_t arg0, const std::pair<shader_stage, const char*>* arg1);
+	typedef void(CALL_CONV*create_texture_2d_proc)(texture_handle*, size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* arg5);
+	typedef void(CALL_CONV*create_texture_3d_proc)(texture_handle*, size_t arg0, size_t arg1, size_t arg2, internal_format arg3, image_format arg4, data_type arg5, const void* arg6);
+	typedef void(CALL_CONV*create_texture_cubemap_proc)(texture_handle*, size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* const* arg5);
+	typedef void(CALL_CONV*create_render_target_proc)(render_target_handle*);
 	typedef void(CALL_CONV*delete_buffer_proc)(buffer_handle arg0);
 	typedef void(CALL_CONV*delete_shader_proc)(shader_handle arg0);
 	typedef void(CALL_CONV*delete_texture_proc)(texture_handle arg0);
@@ -50,47 +50,59 @@ namespace gldr
 	
 	buffer_handle backend::create_buffer(size_t arg0, const void* arg1, buffer_usage arg2)
 	{
-		return _state->create_buffer_func(arg0, arg1, arg2);
+		buffer_handle _retval;
+		_state->create_buffer_func(&_retval, arg0, arg1, arg2);
+		return _retval;
 	}
-	shader_handle backend::create_shader(size_t arg0, std::pair<shader_stage, const char*>* arg1)
+	shader_handle backend::create_shader(size_t arg0, const std::pair<shader_stage, const char*>* arg1)
 	{
-		return _state->create_shader_func(arg0, arg1);
+		shader_handle _retval;
+		_state->create_shader_func(&_retval, arg0, arg1);
+		return _retval;
 	}
 	texture_handle backend::create_texture_2d(size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* arg5)
 	{
-		return _state->create_texture_2d_func(arg0, arg1, arg2, arg3, arg4, arg5);
+		texture_handle _retval;
+		_state->create_texture_2d_func(&_retval, arg0, arg1, arg2, arg3, arg4, arg5);
+		return _retval;
 	}
 	texture_handle backend::create_texture_3d(size_t arg0, size_t arg1, size_t arg2, internal_format arg3, image_format arg4, data_type arg5, const void* arg6)
 	{
-		return _state->create_texture_3d_func(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+		texture_handle _retval;
+		_state->create_texture_3d_func(&_retval, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+		return _retval;
 	}
 	texture_handle backend::create_texture_cubemap(size_t arg0, size_t arg1, internal_format arg2, image_format arg3, data_type arg4, const void* const* arg5)
 	{
-		return _state->create_texture_cubemap_func(arg0, arg1, arg2, arg3, arg4, arg5);
+		texture_handle _retval;
+		_state->create_texture_cubemap_func(&_retval, arg0, arg1, arg2, arg3, arg4, arg5);
+		return _retval;
 	}
 	render_target_handle backend::create_render_target()
 	{
-		return _state->create_render_target_func();
+		render_target_handle _retval;
+		_state->create_render_target_func(&_retval);
+		return _retval;
 	}
 	void backend::delete_buffer(buffer_handle arg0)
 	{
-		return _state->delete_buffer_func(arg0);
+		_state->delete_buffer_func(arg0);
 	}
 	void backend::delete_shader(shader_handle arg0)
 	{
-		return _state->delete_shader_func(arg0);
+		_state->delete_shader_func(arg0);
 	}
 	void backend::delete_texture(texture_handle arg0)
 	{
-		return _state->delete_texture_func(arg0);
+		_state->delete_texture_func(arg0);
 	}
 	void backend::delete_render_target(render_target_handle arg0)
 	{
-		return _state->delete_render_target_func(arg0);
+		_state->delete_render_target_func(arg0);
 	}
 	void backend::set_buffer_data(buffer_handle arg0, size_t arg1, const void* arg2)
 	{
-		return _state->set_buffer_data_func(arg0, arg1, arg2);
+		_state->set_buffer_data_func(arg0, arg1, arg2);
 	}
 	void backend::swap_buffers()
 	{
@@ -99,11 +111,11 @@ namespace gldr
 			cb(const std::function<void()>& v) : f(v) { }
 			~cb() { f(); }
 		} c([=](){ this->sync_callback(); });
-		return _state->swap_buffers_func();
+		_state->swap_buffers_func();
 	}
 	void backend::sync()
 	{
-		return _state->sync_func();
+		_state->sync_func();
 	}
 	
 	void backend::init(const std::string& lib)

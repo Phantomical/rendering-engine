@@ -78,7 +78,7 @@
   <function name="create_shader">
     <return type="shader_handle"/>
     <arg type="size_t" name="num_stages"/>
-    <arg type="std::pair&lt;shader_stage, const char*&gt;*" name="stages"/>
+    <arg type="const std::pair&lt;shader_stage, const char*&gt;*" name="stages"/>
   </function>
   <function name="create_shader">
     <return type="shader_handle"/>
