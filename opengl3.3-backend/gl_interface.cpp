@@ -158,12 +158,46 @@ namespace gl_3_3_backend
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 	}
+	void device_sync(state&, void*)
+	{
+		glFinish();
+	}
 
 	void create_mesh(state& st, void* data)
 	{
 		DECLARE_CMD(create_mesh);
-
+		
 		GLuint vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
+		for (size_t i = 0; i < cmd->num_buffers; ++i)
+		{
+			auto buf = cmd->buffers[i];
+			buffer b = st.buffers.at(buf.handle);
+			glBindBuffer(GL_ARRAY_BUFFER, b.id);
+
+			for (size_t j = 0; j < cmd->num_layouts; ++j)
+			{
+				if (cmd->layouts[j].buffer == buf)
+				{
+					glVertexAttribPointer(
+						cmd->layouts[j].index,
+						cmd->layouts[j].size,
+						enums::data_types[cmd->layouts[j].type],
+						cmd->layouts[i].normalized,
+						static_cast<GLsizei>(cmd->layouts[j].stride),
+						(void*)cmd->layouts[j].offset);
+				}
+			}
+		}
+
+		auto buf = cmd->elements;
+		if (buf.handle.valid())
+		{
+			buffer b = st.buffers.at(buf.handle);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, b.id);
+		}
 	}
 	void create_buffer(state& st, void* data)
 	{
@@ -293,7 +327,8 @@ namespace gl_3_3_backend
 	{
 		DECLARE_CMD(delete_mesh);
 
-		//TODO: Implement
+		mesh m = st.meshes.at(cmd->mesh.handle);
+		glDeleteVertexArrays(1, &m);
 	}
 
 	void set_buffer_data(state& st, void* data)

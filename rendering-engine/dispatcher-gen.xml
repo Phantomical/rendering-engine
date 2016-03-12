@@ -71,7 +71,9 @@
   </enum>
 
   <struct name="buffer_layout">
+    <member type="buffer_handle" name="buffer"/>
     <member type="unsigned" name="index"/>
+    <member type="data_type" name="type"/>
     <member type="uint8_t" name="size"/>
     <member type="bool" name="normalized"/>
     <member type="size_t" name="stride"/>
@@ -139,9 +141,10 @@
   <function name="create_mesh">
     <return type="mesh_handle"/>
     <arg type="size_t" name="num_buffers"/>
-    <arg type="std::pair&lt;unsigned, buffer_handle&gt;*" name="handles"/>
+    <arg type="buffer_handle*" name="buffers"/>
     <arg type="size_t" name="num_layouts"/>
     <arg type="buffer_layout*" name="layouts"/>
+    <arg type="buffer_handle" name="elements" default="buffer_handle()"/>
   </function>
 
   <function name="delete_buffer">
@@ -178,5 +181,8 @@
   <function name="sync">
     <return type="void"/>
     <!-- This does not have a sync declaration on purpose -->
+  </function>
+  <function name="device_sync">
+    <return type="void"/>
   </function>
 </dispatcher>
