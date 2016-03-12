@@ -24,7 +24,7 @@ namespace
 
 	void* load_internal(void* st, const char* funcname)
 	{
-		return reinterpret_cast<void*>(GetProcAddress(((win32_state*)st)->module, funcname));
+		return reinterpret_cast<void*>(GetProcAddress(reinterpret_cast<win32_state*>(st)->module, funcname));
 	}
 }
 #else

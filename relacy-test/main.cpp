@@ -1,4 +1,4 @@
-//Copyright (C) 2016 Sean Lynch
+//Copyright (c) 2016 Sean Lynch
 /*
 	This file is part of rendering-engine.
 	

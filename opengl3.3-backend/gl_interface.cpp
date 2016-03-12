@@ -3,6 +3,7 @@
 #include "concurrent_array.h"
 #include "mpsc_queue.h"
 #include "allocators.h"
+#include "platform.h"
 
 #include "gl_core.h"
 #include "gl_interface.h"
@@ -71,9 +72,10 @@ namespace gl_3_3_backend
 			GL_VERTEX_SHADER,
 			GL_FRAGMENT_SHADER,
 			GL_GEOMETRY_SHADER,
-			GL_TESS_EVALUATION_SHADER,
-			GL_TESS_CONTROL_SHADER,
-			GL_COMPUTE_SHADER
+			//None of these are supported
+			0, //GL_TESS_EVALUATION_SHADER,
+			0, //GL_TESS_CONTROL_SHADER,
+			0 //GL_COMPUTE_SHADER
 		};
 		static constexpr GLenum buffer_usages[] =
 		{
@@ -95,6 +97,9 @@ namespace gl_3_3_backend
 		};
 	}
 
+	void executor_thread(platform::window* win);
+	void create_window(platform::window* win);
+
 	struct state
 	{
 		allocators::linear_atomic alloc;
@@ -106,13 +111,16 @@ namespace gl_3_3_backend
 		detail::concurrent_ra_array<mesh> meshes;
 		detail::concurrent_ra_array<rt> render_targets;
 
+		std::atomic_bool terminate;
 		std::thread thread;
 
-		state() :
+		state(platform::window* win) :
 			alloc(1 << 16),
-			command_queue(&alloc)
+			command_queue(&alloc),
+			terminate(false),
+			thread(executor_thread, win)
 		{
-
+			
 		}
 	};
 
@@ -356,9 +364,9 @@ namespace gl_3_3_backend
 
 using namespace gl_3_3_backend;
 
-extern "C" void _init()
+extern "C" void _init(platform::window* win)
 {
-	global_state = new state;
+	global_state = new state(win);
 }
 extern "C" void _terminate()
 {

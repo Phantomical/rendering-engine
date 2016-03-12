@@ -188,16 +188,20 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="executor.cpp" />
     <ClCompile Include="gl_core.c" />
     <ClCompile Include="gl_interface.cpp" />
+    <ClCompile Include="wgl_core.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="concurrent_array.h" />
+    <ClInclude Include="context.h" />
     <ClInclude Include="gl_core.h" />
     <ClInclude Include="gl_interface.h" />
     <ClInclude Include="mpsc_queue.h" />
     <ClInclude Include="packed_array.h" />
     <ClInclude Include="sema.h" />
+    <ClInclude Include="wgl_core.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="backend-gen.py" />
