@@ -158,6 +158,10 @@ namespace gl_3_3_backend
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 	}
+	void device_sync(state&, void*)
+	{
+		glFinish();
+	}
 
 	void create_mesh(state& st, void* data)
 	{

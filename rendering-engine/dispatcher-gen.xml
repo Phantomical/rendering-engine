@@ -182,4 +182,7 @@
     <return type="void"/>
     <!-- This does not have a sync declaration on purpose -->
   </function>
+  <function name="device_sync">
+    <return type="void"/>
+  </function>
 </dispatcher>
