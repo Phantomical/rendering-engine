@@ -193,11 +193,11 @@ write("_state = new state;")
 write("_state->handle = load_init(lib.c_str());")
 
 for func in funcs:
-    write("_state->" + func.name + "_func = static_cast<" + func.name 
+    write("_state->" + func.name + "_func = reinterpret_cast<" + func.name 
         + "_proc>(load_func(_state->handle, \"_" + func.name + "\"));")
 
-write("_state->terminate_func = static_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"_terminate\"));")
-write("void(*init_func)() = static_cast<void(*)()>(load_func(_state->handle, \"_init\"));")
+write("_state->terminate_func = reinterpret_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"_terminate\"));")
+write("void(*init_func)() = reinterpret_cast<void(*)()>(load_func(_state->handle, \"_init\"));")
 write("if (init_func)")
 write("{")
 level += 1

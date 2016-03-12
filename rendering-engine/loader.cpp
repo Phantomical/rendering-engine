@@ -24,7 +24,7 @@ namespace
 
 	void* load_internal(void* st, const char* funcname)
 	{
-		return GetProcAddress(((win32_state*)st)->module, funcname);
+		return (void*)GetProcAddress(((win32_state*)st)->module, funcname);
 	}
 }
 #else
