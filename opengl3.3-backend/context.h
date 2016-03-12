@@ -20,83 +20,22 @@
 #define OPENGL_3_3_BACKEND_CONTEXT_H
 
 #include "platform.h"
-#include "wgl_core.h"
-#include "gl_core.h"
 #include <cassert>
 
 
-#ifdef _WIN32
-static PROC WinGetProcAddress(const char *name);
-#	define IntGetProcAddress(name) WinGetProcAddress(name)
-#elif defined(__APPLE__)
-static void* AppleGLGetProcAddress(const char *name);
-#	define IntGetProcAddress(name) AppleGLGetProcAddress(name)
-#elif defined(__sgi) || defined(__sun_)
-static void* SunGetProcAddress(const GLubyte* name);
-#	define IntGetProcAddress(name) SunGetProcAddress(name)
-#else
-#	include <GL/glx.h>
-#	define IntGetProcAddress(name) (*glXGetProcAddressARB)((const GLubyte*)name)
-#endif
-
-#ifdef _WIN32
-
 namespace opengl_3_3_backend
 {
-	struct context
-	{
-		HGLRC ctx;
-		HWND win;
-		HDC dc;
+	struct context;
 
-		context(HWND win) :
-			win(win)
-		{
-			/*
-			dc = GetDC(win);
-			assert(dc != NULL);
-
-			HGLRC tmpctx = wglCreateContext(dc);
-			wglMakeCurrent(dc, tmpctx);
-
-			wgl_LoadFunctions(dc);
-
-			const int attribList[] =
-			{
-				WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
-				WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
-				WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-				WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
-				WGL_COLOR_BITS_ARB, 32,
-				WGL_DEPTH_BITS_ARB, 24,
-				WGL_STENCIL_BITS_ARB, 8,
-				0,        //End
-			};
-
-			int pixelFormat;
-			UINT numFormats;
-
-			wglChoosePixelFormatARB(dc, attribList, NULL, 1, &pixelFormat, &numFormats);
-
-			*/
-			
-		}
-
-		void make_current()
-		{
-			wglMakeCurrent(dc, ctx);
-		}
-
-		void swap_buffers()
-		{
-			glFinish();
-			SwapBuffers(dc);
-		}
-
-	};
-}
+#ifdef _WIN32
+	context* create_context(HWND wnd);
 #else
 #error "Unsupported platform"
 #endif
+	void make_context_current(context* ctx);
+	void swap_context_buffers(context* ctx);
+	void delete_context(context* ctx);
+
+}
 
 #endif
