@@ -28,7 +28,7 @@
 #include "gl_core.h"
 #include "wgl_core.h"
 
-namespace opengl_3_3_backend
+namespace gl_3_3_backend
 {
 	struct context
 	{

@@ -16,14 +16,11 @@
 	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "interface.h"
-#include "concurrent_array.h"
-#include "mpsc_queue.h"
-#include "allocators.h"
 #include "platform.h"
 
 #include "gl_core.h"
 #include "gl_interface.h"
+#include "interface_state.h"
 
 #include <thread>
 
@@ -37,16 +34,6 @@
 
 namespace gl_3_3_backend
 {
-	struct buffer
-	{
-		GLuint id;
-		GLenum usage;
-	};
-	typedef GLuint shader;
-	typedef GLuint texture;
-	typedef GLuint rt;
-	typedef GLuint mesh;
-
 	namespace enums
 	{
 		static constexpr GLenum internal_formats[] =
@@ -113,39 +100,13 @@ namespace gl_3_3_backend
 			GL_READ_WRITE
 		};
 	}
-
-	void executor_thread(platform::window* win);
-	void create_window(platform::window* win);
-
-	struct state
-	{
-		allocators::linear_atomic alloc;
-		detail::mpsc_queue<command, decltype(alloc)> command_queue;
-
-		detail::concurrent_ra_array<buffer> buffers;
-		detail::concurrent_ra_array<shader> shaders;
-		detail::concurrent_ra_array<texture> textures;
-		detail::concurrent_ra_array<mesh> meshes;
-		detail::concurrent_ra_array<rt> render_targets;
-
-		std::atomic_bool terminate;
-		std::thread thread;
-
-		state(platform::window* win) :
-			alloc(1 << 16),
-			command_queue(&alloc),
-			terminate(false),
-			thread(executor_thread, win)
-		{
-			
-		}
-	};
-
+	
 	state* global_state = nullptr;
 
 	void enqueue(const command& cmd)
 	{
 		global_state->command_queue.enqueue(cmd);
+		global_state->sema.signal();
 	}
 
 	detail::handle alloc_mesh_handle()
@@ -176,12 +137,13 @@ namespace gl_3_3_backend
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 	}
-	void swap_buffers(state&, void* data)
+	void swap_buffers(state& st, void* data)
 	{
 		typedef commands::swap_buffers cmd;
 		cmd* sync = static_cast<cmd*>(data);
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
+		swap_context_buffers(st.gl_context);
 	}
 	void device_sync(state&, void*)
 	{

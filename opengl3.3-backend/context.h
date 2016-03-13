@@ -20,9 +20,8 @@
 #define OPENGL_3_3_BACKEND_CONTEXT_H
 
 #include "platform.h"
-#include <cassert>
 
-namespace opengl_3_3_backend
+namespace gl_3_3_backend
 {
 	struct context;
 

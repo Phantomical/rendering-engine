@@ -199,6 +199,7 @@
     <ClInclude Include="context.h" />
     <ClInclude Include="gl_core.h" />
     <ClInclude Include="gl_interface.h" />
+    <ClInclude Include="interface_state.h" />
     <ClInclude Include="mpsc_queue.h" />
     <ClInclude Include="packed_array.h" />
     <ClInclude Include="sema.h" />
