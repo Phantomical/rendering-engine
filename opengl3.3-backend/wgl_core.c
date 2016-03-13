@@ -87,6 +87,8 @@ static PROC WinGetProcAddress(const char *name)
 
 int wgl_ext_ARB_create_context = wgl_LOAD_FAILED;
 int wgl_ext_ARB_pixel_format = wgl_LOAD_FAILED;
+int wgl_ext_ARB_create_context_profile = wgl_LOAD_FAILED;
+int wgl_ext_ARB_context_flush_control = wgl_LOAD_FAILED;
 
 HGLRC (CODEGEN_FUNCPTR *_ptrc_wglCreateContextAttribsARB)(HDC hDC, HGLRC hShareContext, const int * attribList) = NULL;
 
@@ -125,12 +127,14 @@ typedef struct wgl_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } wgl_StrToExtMap;
 
-static wgl_StrToExtMap ExtensionMap[2] = {
+static wgl_StrToExtMap ExtensionMap[4] = {
 	{"WGL_ARB_create_context", &wgl_ext_ARB_create_context, Load_ARB_create_context},
 	{"WGL_ARB_pixel_format", &wgl_ext_ARB_pixel_format, Load_ARB_pixel_format},
+	{"WGL_ARB_create_context_profile", &wgl_ext_ARB_create_context_profile, NULL},
+	{"WGL_ARB_context_flush_control", &wgl_ext_ARB_context_flush_control, NULL},
 };
 
-static int g_extensionMapSize = 2;
+static int g_extensionMapSize = 4;
 
 static wgl_StrToExtMap *FindExtEntry(const char *extensionName)
 {
@@ -149,6 +153,8 @@ static void ClearExtensionVars(void)
 {
 	wgl_ext_ARB_create_context = wgl_LOAD_FAILED;
 	wgl_ext_ARB_pixel_format = wgl_LOAD_FAILED;
+	wgl_ext_ARB_create_context_profile = wgl_LOAD_FAILED;
+	wgl_ext_ARB_context_flush_control = wgl_LOAD_FAILED;
 }
 
 

@@ -70,6 +70,8 @@ extern "C" {
 
 extern int wgl_ext_ARB_create_context;
 extern int wgl_ext_ARB_pixel_format;
+extern int wgl_ext_ARB_create_context_profile;
+extern int wgl_ext_ARB_context_flush_control;
 
 #define WGL_CONTEXT_DEBUG_BIT_ARB 0x00000001
 #define WGL_CONTEXT_FLAGS_ARB 0x2094
@@ -129,6 +131,15 @@ extern int wgl_ext_ARB_pixel_format;
 #define WGL_TYPE_COLORINDEX_ARB 0x202C
 #define WGL_TYPE_RGBA_ARB 0x202B
 
+#define WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB 0x00000002
+#define WGL_CONTEXT_CORE_PROFILE_BIT_ARB 0x00000001
+#define WGL_CONTEXT_PROFILE_MASK_ARB 0x9126
+#define WGL_ERROR_INVALID_PROFILE_ARB 0x2096
+
+#define WGL_CONTEXT_RELEASE_BEHAVIOR_ARB 0x2097
+#define WGL_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB 0x2098
+#define WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB 0
+
 #ifndef WGL_ARB_create_context
 #define WGL_ARB_create_context 1
 extern HGLRC (CODEGEN_FUNCPTR *_ptrc_wglCreateContextAttribsARB)(HDC hDC, HGLRC hShareContext, const int * attribList);
@@ -144,6 +155,8 @@ extern BOOL (CODEGEN_FUNCPTR *_ptrc_wglGetPixelFormatAttribfvARB)(HDC hdc, int i
 extern BOOL (CODEGEN_FUNCPTR *_ptrc_wglGetPixelFormatAttribivARB)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int * piAttributes, int * piValues);
 #define wglGetPixelFormatAttribivARB _ptrc_wglGetPixelFormatAttribivARB
 #endif /*WGL_ARB_pixel_format*/ 
+
+
 
 enum wgl_LoadStatus
 {
