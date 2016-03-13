@@ -22,16 +22,11 @@
 #include "platform.h"
 #include <cassert>
 
-
 namespace opengl_3_3_backend
 {
 	struct context;
 
-#ifdef _WIN32
-	context* create_context(HWND wnd);
-#else
-#error "Unsupported platform"
-#endif
+	context* create_context(const gldr::platform::window& win);
 	void make_context_current(context* ctx);
 	void swap_context_buffers(context* ctx);
 	void delete_context(context* ctx);

@@ -1,3 +1,26 @@
+//Copyright (c) 2016 Sean Lynch
+/*
+	This file is part of rendering-engine.
+	
+	rendering-engine is free software : you can redistribute it and / or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	rendering-engine is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+	OpenGL context initialization and other platform specific context functions
+	for MS Windows.
+*/
+
 #ifdef _WIN32
 
 #include <Windows.h>
@@ -14,11 +37,11 @@ namespace opengl_3_3_backend
 		HGLRC ctx;
 	};
 
-	context* create_context(HWND wnd)
+	context* create_context(const gldr::platform::window& wnd)
 	{
 		context ctx;
-		ctx.wnd = wnd;
-		ctx.dc = GetDC(wnd);
+		ctx.wnd = wnd.win;
+		ctx.dc = GetDC(wnd.win);
 
 		if (!ctx.dc)
 			return nullptr;
@@ -31,12 +54,12 @@ namespace opengl_3_3_backend
 
 		int flags = 0, mask = 0;
 
-		if (wgl_ext_ARB_create_context)
+		//This extension should be supported just about everywhere
+		if (wgl_ext_ARB_create_context 
+			&& wgl_ext_ARB_create_context_profile)
 		{
-			flags |= WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
-
+			//We don't want legacy features
 			mask |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
-			mask |= WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
 
 			int attribs[] =
 			{
@@ -49,10 +72,24 @@ namespace opengl_3_3_backend
 			};
 
 			ctx.ctx = wglCreateContextAttribsARB(ctx.dc, NULL, attribs);
+
+			int major = ogl_GetMajorVersion();
+			int minor = ogl_GetMinorVersion();
+
+			if (major < 3 || (major == 3 && minor < 3))
+				//We got a context that was a older version than OpenGL 3.3
+				return nullptr;
 		}
 		else
 		{
 			ctx.ctx = wglCreateContext(ctx.dc);
+
+			int major = ogl_GetMajorVersion();
+			int minor = ogl_GetMinorVersion();
+
+			if (major < 3 || (major == 3 && minor < 3))
+				//We got a context that was a older version than OpenGL 3.3
+				return nullptr;
 		}
 
 		ogl_LoadFunctions();
