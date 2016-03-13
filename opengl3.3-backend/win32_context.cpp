@@ -2,8 +2,8 @@
 
 #include <Windows.h>
 #include "context.h"
-#include "wgl_core.h"
 #include "gl_core.h"
+#include "wgl_core.h"
 
 namespace opengl_3_3_backend
 {

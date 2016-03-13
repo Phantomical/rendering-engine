@@ -30,6 +30,9 @@
     <ClCompile Include="wgl_core.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="win32_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="concurrent_array.h">

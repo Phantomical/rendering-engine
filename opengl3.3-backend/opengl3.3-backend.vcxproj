@@ -192,6 +192,7 @@
     <ClCompile Include="gl_core.c" />
     <ClCompile Include="gl_interface.cpp" />
     <ClCompile Include="wgl_core.c" />
+    <ClCompile Include="win32_context.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="concurrent_array.h" />
