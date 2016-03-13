@@ -20,10 +20,12 @@
 #define RE_PLATFORM_H
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#define WIN32_EXTRA_LEAN
-#define NOMINMAX
+#ifndef _WINDOWS_
+#define WIN32_LEAN_AND_MEAN 1
+#define WIN32_EXTRA_LEAN 1
+#define NOMINMAX 1
 #include <Windows.h>
+#endif
 
 namespace gldr
 {

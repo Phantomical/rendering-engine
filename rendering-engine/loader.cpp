@@ -1,5 +1,8 @@
 
 #ifdef _WIN32
+#ifdef _MSC_VER
+#	pragma warning(disable:4820)
+#endif
 #include <Windows.h>
 #include <stdlib.h>
 

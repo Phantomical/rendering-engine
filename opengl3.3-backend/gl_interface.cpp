@@ -24,6 +24,7 @@
 
 #include <thread>
 
+#define UNUSED(arg)
 
 //The amount of threads that will be signaled
 //with a sync or end_frame call. There should never
@@ -145,7 +146,7 @@ namespace gl_3_3_backend
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 		swap_context_buffers(st.gl_context);
 	}
-	void device_sync(state&, void*)
+	void device_sync(state& UNUSED(st), void* UNUSED(data))
 	{
 		glFinish();
 	}
@@ -327,13 +328,13 @@ namespace gl_3_3_backend
 		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 	}
 
-	void create_render_target(state& st, void* data)
+	void create_render_target(state& UNUSED(st), void* UNUSED(data))
 	{
 		//TODO: Implement
 		//This isn't supported yet
 		assert(false);
 	}
-	void delete_render_target(state& st, void* data)
+	void delete_render_target(state& UNUSED(st), void* UNUSED(data))
 	{
 		//TODO: Implement
 		//This isn't supported yet

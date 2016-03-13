@@ -25,6 +25,11 @@
 
 #include "handle.h"
 
+#ifdef _MSC_VER
+//Disable spurious warning in remove_value
+#	pragma warning(disable:4100)
+#endif
+
 namespace gldr
 {
 	namespace detail
@@ -130,6 +135,10 @@ namespace gldr
 				new(&_values[h.index]) value_type(val);
 				++_num_values;
 			}
+#ifdef _MSC_VER
+			//Disable spurious warning in remove_value
+#	pragma warning(suppress:4100)
+#endif
 			void remove_value(const handle& h)
 			{
 				_values[h.index].~value_type();
