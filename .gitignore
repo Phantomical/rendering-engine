@@ -10,6 +10,8 @@ opengl3.3-backend/gl_interface.h
 rendering-engine/interface.h
 rendering-engine/dispatcher.cpp
 
+# Ignore dependencies included in the deps folder
+deps/
 
 # User-specific files
 *.suo

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dispatcher>
   <include>handle.h</include>
+  <include>drawstate.h</include>
   <lib-include>initializer_list</lib-include>
   <lib-include>utility</lib-include>
   <lib-include>string</lib-include>
@@ -69,7 +70,10 @@
     <value name="INT"/>
     <value name="FLOAT"/>
   </enum>
-
+  
+  <struct name="draw_command">
+    <no-def/>
+  </struct>
   <struct name="buffer_layout">
     <member type="buffer_handle" name="buffer"/>
     <member type="unsigned" name="index"/>
@@ -78,6 +82,11 @@
     <member type="bool" name="normalized"/>
     <member type="size_t" name="stride"/>
     <member type="size_t" name="offset"/>
+  </struct>
+  <struct name="command_queue">
+    <arg type="drawstate" name="state"/>
+    <arg type="size_t" name="num_commands"/>
+    <arg type="draw_command*" name="commands"/>
   </struct>
 
   <function name="create_buffer">
@@ -172,6 +181,10 @@
     <arg type="buffer_handle" name="buffer"/>
     <arg type="size_t" name="size"/>
     <arg type="const void*" name="data"/>
+  </function>
+  <function name="dispatch_commands">
+    <return type="void"/>
+    <arg type="command_queue" name="queue"/>
   </function>
 
   <function name="swap_buffers">

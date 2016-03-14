@@ -105,16 +105,19 @@ for func in root.findall("function"):
     args = ""
     cnt = 0
     for arg in func.findall("arg"):
-       type = arg.get("type")
-       if type == None:
-           print("Invalid argument declaration in function " + name)
-           continue
-       if cond:
-          args += ", "
-       else:
-           cond = True
-       args += type + " arg" + str(cnt)
-       cnt += 1
+        type = arg.get("type")
+        if type == None:
+            print("Invalid argument declaration in function " + name)
+            continue
+        if cond:
+           args += ", "
+        else:
+            cond = True
+        if arg.get("ref", "false") == "true":
+            args += "const " + type + "& arg" + str(cnt)
+        else:
+            args += type + " arg" + str(cnt)
+        cnt += 1
     funcs.append(func_t(name, rettype, args, cnt, func.find("sync") != None))
 
 #declare typedefs

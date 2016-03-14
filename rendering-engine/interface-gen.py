@@ -135,6 +135,9 @@ for struct in root.findall("struct"):
     if name == None:
         print("Invalid struct declaration detected")
         continue
+    if struct.find("no-def") != None:
+        write("struct " + name + ";")
+        continue
     write("struct " + name)
     write("{")
     level += 1
@@ -193,6 +196,7 @@ for func in root.findall("function"):
         type = arg.get("type")
         name = arg.get("name", "")
         default = arg.get("default")
+        ref = arg.get("ref", "false")
         if type == None:
             print("Invalid argument declaration in function " + name)
             continue

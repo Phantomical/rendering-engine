@@ -69,6 +69,7 @@ write("""/*
 """)
 
 write("#include \"interface.h\"")
+write('#include "command_queue.h"')
 write("")
 write("#define CALL_CONV " + namespace.upper() + "_BACKEND_CALL_CONV")
 write("#ifdef _WIN32")

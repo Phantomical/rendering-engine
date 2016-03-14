@@ -121,6 +121,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;RENDERINGENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,6 +148,7 @@ $(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;RENDERINGENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,6 +177,7 @@ $(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;RENDERINGENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -205,6 +208,7 @@ $(PythonPath) $(ProjectDir)dispatcher-gen.py dispatcher-gen.xml dispatcher.cpp</
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;RENDERINGENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
