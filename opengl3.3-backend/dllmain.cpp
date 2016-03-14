@@ -2,6 +2,10 @@
 #ifdef _WIN32
 #include <Windows.h>
 
+#ifdef _MSC_VER
+#	pragma warning(disable: 4100)
+#endif
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved

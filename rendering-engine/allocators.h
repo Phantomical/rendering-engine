@@ -57,7 +57,7 @@ namespace gldr
 				return static_cast<char*>(_memptr) + offset;
 			}
 			//Does nothing, stub for use with possible future templates
-			void dealloc(void* ptr) { }
+			void dealloc(void*) { }
 			//Deallocates everything in the pool
 			void reset()
 			{
@@ -109,7 +109,7 @@ namespace gldr
 				return static_cast<char*>(_memptr) + offset;
 			}
 			//Does nothing, linear allocators only support deallocation through calling reset()
-			void dealloc(void* mem) { }
+			void dealloc(void*) { }
 			//Deallocates everything.
 			//Note: This is thread safe, but if you call this and threads are still
 			//      attempting to use the memory you will have pulled the data out

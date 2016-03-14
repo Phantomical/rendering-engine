@@ -20,7 +20,7 @@ namespace gldr
 			if (stages.begin()[i].second != nullptr)
 			{
 				size_t sz = std::char_traits<char>::length(stages.begin()[i].second) + 1;
-				char* buf = (char*)alloc->alloc(sz);
+				buf = (char*)alloc->alloc(sz);
 				memcpy(buf, stages.begin()[i].second, sz - 1);
 				buf[sz - 1] = 0;
 			}

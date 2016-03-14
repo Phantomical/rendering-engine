@@ -16,51 +16,30 @@
 	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define GLDR_RELACY_TEST
+#ifndef RE_PLATFORM_H
+#define RE_PLATFORM_H
 
-#ifdef _MSC_VER
-#	pragma warning (disable:4311 4302 4267 4312 4290)
+#ifdef _WIN32
+#ifndef _WINDOWS_
+#define WIN32_LEAN_AND_MEAN 1
+#define WIN32_EXTRA_LEAN 1
+#define NOMINMAX 1
+#include <Windows.h>
 #endif
 
-#include "mpsc_queue.h"
-
-using namespace gldr::detail;
-using namespace gldr::allocators;
-
-struct queue_test : rl::test_suite<queue_test, 4>
+namespace gldr
 {
-	standard allocator;
-	mpsc_queue<int> queue;
-
-	queue_test() :
-		queue(&allocator)
+	namespace platform
 	{
-
-	}
-
-	void before() { }
-	void after() { }
-
-	void thread(unsigned index)
-	{
-		if (index == 0)
+		struct window
 		{
-			int res = 0;
-			queue.try_dequeue(res);
-			queue.try_dequeue(res);
-		}
-		else
-		{
-			queue.enqueue(index);
-		}
+			HWND win;
+		};
 	}
-};
-
-int main(int, const char*)
-{
-	rl::test_params params;
-	//For most test we don't need to search everything
-	//params.search_type = rl::sched_full;
-	params.iteration_count = 100000;
-	return rl::simulate<queue_test>(params) ? 0 : 1;
 }
+#else
+#error "Unsupported platform"
+#endif
+
+
+#endif

@@ -1,5 +1,8 @@
 
 #ifdef _WIN32
+#ifdef _MSC_VER
+#	pragma warning(disable:4820)
+#endif
 #include <Windows.h>
 #include <stdlib.h>
 
@@ -24,7 +27,7 @@ namespace
 
 	void* load_internal(void* st, const char* funcname)
 	{
-		return GetProcAddress(((win32_state*)st)->module, funcname);
+		return reinterpret_cast<void*>(GetProcAddress(reinterpret_cast<win32_state*>(st)->module, funcname));
 	}
 }
 #else

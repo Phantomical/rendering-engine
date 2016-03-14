@@ -1,14 +1,30 @@
+//Copyright (c) 2016 Sean Lynch
+/*
+	This file is part of rendering-engine.
+	
+	rendering-engine is free software : you can redistribute it and / or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	rendering-engine is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#include "interface.h"
-#include "concurrent_array.h"
-#include "mpsc_queue.h"
-#include "allocators.h"
+#include "platform.h"
 
 #include "gl_core.h"
 #include "gl_interface.h"
+#include "interface_state.h"
 
 #include <thread>
 
+#define UNUSED(arg)
 
 //The amount of threads that will be signaled
 //with a sync or end_frame call. There should never
@@ -19,16 +35,6 @@
 
 namespace gl_3_3_backend
 {
-	struct buffer
-	{
-		GLuint id;
-		GLenum usage;
-	};
-	typedef GLuint shader;
-	typedef GLuint texture;
-	typedef GLuint rt;
-	typedef GLuint mesh;
-
 	namespace enums
 	{
 		static constexpr GLenum internal_formats[] =
@@ -71,9 +77,10 @@ namespace gl_3_3_backend
 			GL_VERTEX_SHADER,
 			GL_FRAGMENT_SHADER,
 			GL_GEOMETRY_SHADER,
-			GL_TESS_EVALUATION_SHADER,
-			GL_TESS_CONTROL_SHADER,
-			GL_COMPUTE_SHADER
+			//None of these are supported
+			0, //GL_TESS_EVALUATION_SHADER,
+			0, //GL_TESS_CONTROL_SHADER,
+			0 //GL_COMPUTE_SHADER
 		};
 		static constexpr GLenum buffer_usages[] =
 		{
@@ -94,33 +101,13 @@ namespace gl_3_3_backend
 			GL_READ_WRITE
 		};
 	}
-
-	struct state
-	{
-		allocators::linear_atomic alloc;
-		detail::mpsc_queue<command, decltype(alloc)> command_queue;
-
-		detail::concurrent_ra_array<buffer> buffers;
-		detail::concurrent_ra_array<shader> shaders;
-		detail::concurrent_ra_array<texture> textures;
-		detail::concurrent_ra_array<mesh> meshes;
-		detail::concurrent_ra_array<rt> render_targets;
-
-		std::thread thread;
-
-		state() :
-			alloc(1 << 16),
-			command_queue(&alloc)
-		{
-
-		}
-	};
-
+	
 	state* global_state = nullptr;
 
 	void enqueue(const command& cmd)
 	{
 		global_state->command_queue.enqueue(cmd);
+		global_state->sema.signal();
 	}
 
 	detail::handle alloc_mesh_handle()
@@ -151,14 +138,15 @@ namespace gl_3_3_backend
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
 	}
-	void swap_buffers(state&, void* data)
+	void swap_buffers(state& st, void* data)
 	{
 		typedef commands::swap_buffers cmd;
 		cmd* sync = static_cast<cmd*>(data);
 
 		sync->sema->signal(SEMA_SIGNAL_COUNT);
+		swap_context_buffers(st.gl_context);
 	}
-	void device_sync(state&, void*)
+	void device_sync(state& UNUSED(st), void* UNUSED(data))
 	{
 		glFinish();
 	}
@@ -340,13 +328,13 @@ namespace gl_3_3_backend
 		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 	}
 
-	void create_render_target(state& st, void* data)
+	void create_render_target(state& UNUSED(st), void* UNUSED(data))
 	{
 		//TODO: Implement
 		//This isn't supported yet
 		assert(false);
 	}
-	void delete_render_target(state& st, void* data)
+	void delete_render_target(state& UNUSED(st), void* UNUSED(data))
 	{
 		//TODO: Implement
 		//This isn't supported yet
@@ -356,9 +344,9 @@ namespace gl_3_3_backend
 
 using namespace gl_3_3_backend;
 
-extern "C" void _init()
+extern "C" void _init(platform::window* win)
 {
-	global_state = new state;
+	global_state = new state(win);
 }
 extern "C" void _terminate()
 {

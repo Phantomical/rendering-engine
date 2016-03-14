@@ -1,4 +1,23 @@
-#pragma once
+//Copyright (c) 2016 Sean Lynch
+/*
+	This file is part of rendering-engine.
+	
+	rendering-engine is free software : you can redistribute it and / or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	rendering-engine is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef RE_DRAWSTATE_H
+#define RE_DRAWSTATE_H
 
 #include <cstdint>
 
@@ -31,6 +50,8 @@ namespace gldr
 				bool sample_mask : 1;
 				bool scissor_test : 1; // Enable the stencil test
 				bool texture_cube_map_seamless : 1; //Enables smoother interpolation in cubemaps
+				bool transform_feedback : 1; //Enables transform feedback
+				bool discard_output : 1; //Prevents output primitives from being rendered (Useful with transform feedback)
 			};
 			uint32_t _key_val; //This will work as long as there are less than 32 flags
 		};
@@ -40,5 +61,11 @@ namespace gldr
 		{
 			
 		}
+		drawstate(uint32_t bitfield) :
+			_key_val(bitfield)
+		{
+
+		}
 	};
 }
+#endif

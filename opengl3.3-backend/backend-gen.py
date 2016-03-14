@@ -235,9 +235,9 @@ for func in funcs:
         args = ""
         if func.nargs != 0:
             args = ", " + func.args
-        write('extern "C" void _' + func.name + '(' + func.rettype + "* _retval" + args + ')')
+        write('extern "C" inline void _' + func.name + '(' + func.rettype + "* _retval" + args + ')')
     else:
-        write('extern "C" void _' + func.name + '(' + func.args + ')')
+        write('extern "C" inline void _' + func.name + '(' + func.args + ')')
     write('{')
     level += 1
 
