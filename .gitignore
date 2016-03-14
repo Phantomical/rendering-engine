@@ -11,7 +11,7 @@ rendering-engine/interface.h
 rendering-engine/dispatcher.cpp
 
 # Ignore dependencies included in the deps folder
-# deps/
+deps/
 
 # User-specific files
 *.suo
