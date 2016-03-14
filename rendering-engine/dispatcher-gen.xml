@@ -84,9 +84,9 @@
     <member type="size_t" name="offset"/>
   </struct>
   <struct name="command_queue">
-    <arg type="drawstate" name="state"/>
-    <arg type="size_t" name="num_commands"/>
-    <arg type="draw_command*" name="commands"/>
+    <member type="drawstate" name="state"/>
+    <member type="size_t" name="num_commands"/>
+    <member type="draw_command*" name="commands"/>
   </struct>
 
   <function name="create_buffer">

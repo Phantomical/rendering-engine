@@ -208,9 +208,4 @@ namespace gldr
 #undef RE_DEF_CONSTRUCTOR			
 		};
 	}
-
-	struct draw_command
-	{
-
-	};
 }
