@@ -50,6 +50,8 @@ namespace gldr
 				bool sample_mask : 1;
 				bool scissor_test : 1; // Enable the stencil test
 				bool texture_cube_map_seamless : 1; //Enables smoother interpolation in cubemaps
+				bool transform_feedback : 1; //Enables transform feedback
+				bool discard_output : 1; //Prevents output primitives from being rendered (Useful with transform feedback)
 			};
 			uint32_t _key_val; //This will work as long as there are less than 32 flags
 		};
@@ -58,6 +60,11 @@ namespace gldr
 			_key_val(0)
 		{
 			
+		}
+		drawstate(uint32_t bitfield) :
+			_key_val(bitfield)
+		{
+
 		}
 	};
 }
