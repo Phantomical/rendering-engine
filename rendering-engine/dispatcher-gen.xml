@@ -85,6 +85,7 @@
   </struct>
   <struct name="command_queue">
     <member type="drawstate" name="state"/>
+    <member type="render_target_handle" name="render_target"/>
     <member type="size_t" name="num_commands"/>
     <member type="draw_command*" name="commands"/>
   </struct>

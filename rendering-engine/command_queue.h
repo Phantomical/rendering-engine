@@ -1,6 +1,7 @@
 #pragma once
 
 #include "drawstate.h"
+#include "interface.h"
 
 #include "glm\glm.hpp"
 
@@ -8,47 +9,47 @@
 
 namespace gldr
 {
-	enum class primitive_type : uint8_t
+	enum primitive_type : uint8_t
 	{
-		TRIANGLES,
-		TRIANGLE_STRIP,
-		POINTS,
-		LINES
+		PRIMITIVE_TRIANGLES,
+		PRIMITIVE_TRIANGLE_STRIP,
+		PRIMITIVE_POINTS,
+		PRIMITIVE_LINES
 	};
-	enum class uniform_type : uint8_t
+	enum uniform_type : uint8_t
 	{
-		BOOL,
-		BYTE,
-		SHORT,
-		INT,
-		UBYTE,
-		USHORT,
-		UINT,
-		TEXTURE,
-		VEC2I,
-		VEC3I,
-		VEC4I,
-		VEC2UI,
-		VEC3UI,
-		VEC4UI,
-		VEC2F,
-		VEC3F,
-		VEC4F
+		UNIFORM_BOOL,
+		UNIFORM_BYTE,
+		UNIFORM_SHORT,
+		UNIFORM_INT,
+		UNIFORM_UBYTE,
+		UNIFORM_USHORT,
+		UNIFORM_UINT,
+		UNIFORM_TEXTURE,
+		UNIFORM_VEC2I,
+		UNIFORM_VEC3I,
+		UNIFORM_VEC4I,
+		UNIFORM_VEC2UI,
+		UNIFORM_VEC3UI,
+		UNIFORM_VEC4UI,
+		UNIFORM_VEC2F,
+		UNIFORM_VEC3F,
+		UNIFORM_VEC4F
 	};
-	enum class uniform_matrix_type : uint8_t
+	enum uniform_matrix_type : uint8_t
 	{
-		MAT2X2F,
-		MAT2X3F,
-		MAT2X4F,
-		MAT3X2F,
-		MAT3X3F,
-		MAT3X4F,
-		MAT4X2F,
-		MAT4X3F,
-		MAT4X4F
+		UNIFORM_MAT2X2F,
+		UNIFORM_MAT2X3F,
+		UNIFORM_MAT2X4F,
+		UNIFORM_MAT3X2F,
+		UNIFORM_MAT3X3F,
+		UNIFORM_MAT3X4F,
+		UNIFORM_MAT4X2F,
+		UNIFORM_MAT4X3F,
+		UNIFORM_MAT4X4F
 	};
 
-	namespace _1
+	namespace draw_commands
 	{
 		struct draw_arrays
 		{
@@ -130,7 +131,7 @@ namespace gldr
 
 			//Utilty macro since all the definitions are practically identical
 #define RE_DEF_CONSTRUCTOR(_eval, _type, _tval) set_shader_uniform(const shader_handle shader, const int16_t location, const _type& val) : \
-				shader(shader), location(location), type(uniform_type::_eval), _tval(val) { }
+				shader(shader), location(location), type(uniform_type::UNIFORM_##_eval), _tval(val) { }
 
 			RE_DEF_CONSTRUCTOR(BOOL, bool, bool_val)
 			RE_DEF_CONSTRUCTOR(BYTE, signed char, byte_val)
@@ -193,7 +194,7 @@ namespace gldr
 			~set_shader_matrix_uniform() { }
 
 #define RE_DEF_CONSTRUCTOR(_eval, _type) set_shader_matrix_uniform(const shader_handle shader, const int16_t location, const glm::_type& val) : \
-				shader(shader), location(location), type(uniform_matrix_type::_eval), _type(val) { }
+				shader(shader), location(location), type(uniform_matrix_type::UNIFORM_##_eval), _type(val) { }
 		
 			RE_DEF_CONSTRUCTOR(MAT2X2F, mat2x2)
 			RE_DEF_CONSTRUCTOR(MAT2X3F, mat2x3)
@@ -207,5 +208,45 @@ namespace gldr
 
 #undef RE_DEF_CONSTRUCTOR			
 		};
+		struct transform_feedback_arrays
+		{
+			draw_arrays draw_command;
+			buffer_handle output_buffer;
+			//This can be null to indicate that the client doesn't want to know
+			unsigned* primitives_generated;
+		};
+		struct transform_feedback_elements
+		{
+			draw_elements draw_command;
+			buffer_handle output_buffer;
+			//This can be null to indicate that the client doesn't want to know
+			unsigned* primitives_generated;
+		};
 	}
+	
+	struct draw_command
+	{
+		enum type : uint8_t
+		{
+			DRAW_ARRAYS,
+			DRAW_ELEMENTS,
+			DRAW_ARRAYS_INSTANCED,
+			DRAW_ELEMENTS_INSTANCED,
+			SET_SHADER_UNIFORM,
+			SET_SHADER_MATRIX_UNIFORM,
+			TRANSFORM_FEEDBACK_ARRAYS,
+			TRANSFORM_FEEDBACK_ELEMENTS
+		} type;
+		union
+		{
+			draw_commands::draw_arrays draw_arrays;
+			draw_commands::draw_elements draw_elements;
+			draw_commands::draw_arrays_instanced draw_arrays_instanced;
+			draw_commands::draw_elements_instanced draw_elements_instanced;
+			draw_commands::set_shader_uniform set_shader_uniform;
+			draw_commands::set_shader_matrix_uniform set_shader_matrix_uniform;
+			draw_commands::transform_feedback_arrays transform_feedback_arrays;
+			draw_commands::transform_feedback_elements transform_feedback_elements;
+		};
+	};
 }
