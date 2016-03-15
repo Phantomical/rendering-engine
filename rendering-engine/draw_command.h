@@ -236,7 +236,7 @@ namespace gldr
 			SET_SHADER_MATRIX_UNIFORM,
 			TRANSFORM_FEEDBACK_ARRAYS,
 			TRANSFORM_FEEDBACK_ELEMENTS
-		} type;
+		} _type;
 		union
 		{
 			draw_commands::draw_arrays draw_arrays;
@@ -248,5 +248,28 @@ namespace gldr
 			draw_commands::transform_feedback_arrays transform_feedback_arrays;
 			draw_commands::transform_feedback_elements transform_feedback_elements;
 		};
+
+		draw_command() = default;
+		draw_command(const type t) :
+			_type(t)
+		{
+
+		}
+		~draw_command() { }
+
+		draw_command& operator=(const draw_command& o) = default;
+
+#define RE_DEF_CONSTRUCTOR(vty) draw_command(const type t, const draw_commands::vty& val) : _type(t), vty(val) { }
+
+		RE_DEF_CONSTRUCTOR(draw_arrays)
+		RE_DEF_CONSTRUCTOR(draw_elements)
+		RE_DEF_CONSTRUCTOR(draw_arrays_instanced)
+		RE_DEF_CONSTRUCTOR(draw_elements_instanced)
+		RE_DEF_CONSTRUCTOR(set_shader_uniform)
+		RE_DEF_CONSTRUCTOR(set_shader_matrix_uniform)
+		RE_DEF_CONSTRUCTOR(transform_feedback_arrays)
+		RE_DEF_CONSTRUCTOR(transform_feedback_elements)
+
+#undef RE_DEF_CONSTRUCTOR
 	};
 }

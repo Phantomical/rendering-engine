@@ -68,12 +68,12 @@ write("""/*
 */
 """)
  
-write("#ifndef OPENGL_3_3_BACKEND_IMPLEMENTATION_H")
-write("#define OPENGL_3_3_BACKEND_IMPLEMENTATION_H")
+write('#ifndef OPENGL_3_3_BACKEND_IMPLEMENTATION_H')
+write('#define OPENGL_3_3_BACKEND_IMPLEMENTATION_H')
 write("")
 write('#include "interface.h"')
 write('#include "sema.h"')
-write('#include "command_queue.h"')
+write('#include "draw_command.h"')
 write()
 write('#define CALL_CONV ' + namespace.upper() + '_BACKEND_CALL_CONV')
 write('#ifdef _WIN32')
