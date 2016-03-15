@@ -232,6 +232,11 @@ namespace gl_3_3_backend
 			glAttachShader(program, stages[i]);
 		}
 
+		if (cmd->transform_feedback_varyings != nullptr && cmd->num_tf_varyings != 0)
+		{
+			glTransformFeedbackVaryings(program, cmd->num_tf_varyings, cmd->transform_feedback_varyings, GL_INTERLEAVED_ATTRIBS);
+		}
+
 		glLinkProgram(program);
 
 		for (size_t i = 0; i < cmd->num_stages; ++i)

@@ -9,7 +9,7 @@ namespace gldr
 		allocator()->reset();
 	}
 
-	shader_handle backend::create_shader(const std::initializer_list<std::pair<shader_stage, const char*>>& stages)
+	shader_handle backend::create_shader(const std::initializer_list<std::pair<shader_stage, const char*>>& stages, const std::initializer_list<const char*>& tf_varyings)
 	{
 		auto alloc = allocator();
 
@@ -27,8 +27,27 @@ namespace gldr
 
 			new(&array[i]) std::pair<shader_stage, const char*>(stages.begin()[i].first, buf);
 		}
+		char** varyings = nullptr;
+		size_t nvars = 0;
+		if (tf_varyings.size() != 0)
+		{
+			varyings = (char**)alloc->alloc(sizeof(char*) * tf_varyings.size());
 
-		return create_shader(stages.size(), array);
+			for (const char* str : tf_varyings)
+			{
+				if (str != nullptr)
+				{
+					size_t sz = std::char_traits<char>::length(str) + 1;
+					char* buf = (char*)alloc->alloc(sz);
+					memcpy(buf, str, sz - 1);
+					buf[sz - 1] = 0;
+					varyings[nvars] = buf;
+					++nvars;
+				}				
+			}
+		}
+
+		return create_shader(stages.size(), array, nvars, varyings);
 	}
 	texture_handle backend::create_texture_cubemap(uint16_t width, uint16_t height, internal_format iformat, image_format format, data_type type, const std::array<const void*, 6>& data)
 	{

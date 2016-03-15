@@ -7,6 +7,7 @@
   <lib-include>string</lib-include>
   <lib-include>array</lib-include>
   <lib-include>cstdint</lib-include>
+  <lib-include>vector</lib-include>
 
   <handle type="mesh_handle"/>
   <handle type="buffer_handle"/>
@@ -100,10 +101,13 @@
     <return type="shader_handle"/>
     <arg type="size_t" name="num_stages"/>
     <arg type="const std::pair&lt;shader_stage, const char*&gt;*" name="stages"/>
+    <arg type="size_t" name="num_tf_varyings" default="0"/>
+    <arg type="const char* const*" name="transform_feedback_varyings" default="nullptr"/>
   </function>
   <function name="create_shader">
     <return type="shader_handle"/>
     <arg type="const std::initializer_list&lt;std::pair&lt;shader_stage, const char*&gt;&gt;&amp;" name="stages"/>
+    <arg type="const std::initializer_list&lt;const char*&gt;&amp;" name="transform_feedback_varyings" default="{}"/>
     <no-implement/>
   </function>
   <function name="create_texture_2d">
