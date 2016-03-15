@@ -213,6 +213,10 @@ for func in root.findall("function"):
 level -= 1
 write("};")
 
+write("")
+#Default renderbuffer (The one that draws to the screen)
+write("const render_target_handle default_render_target = render_target_handle(detail::handle(0, 0));")
+
 level -= 1
 write("}")
 write("")
