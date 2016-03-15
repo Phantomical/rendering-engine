@@ -26,6 +26,9 @@ namespace = "gldr"
 tree = ET.parse(file)
 root = tree.getroot()
 
+# A list of all the commands that should not be generated
+no_gen = ["dispatch_commands"]
+
 output = ""
 level = 0
 
@@ -105,6 +108,9 @@ for func in root.findall("function"):
     name = func.get("name")
     if name == None:
         print("Invalid function declaration detected")
+        continue
+    if name in no_gen:
+        #This function is listed as one we don't want to generate automatically
         continue
     ret = func.find("return")
     if ret == None:

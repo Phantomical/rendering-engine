@@ -13,12 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\bindings">
+      <UniqueIdentifier>{d63668f7-de5b-4802-8884-e0185c4513c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gl_core.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gl_interface.cpp">
@@ -27,11 +27,14 @@
     <ClCompile Include="executor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wgl_core.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="win32_context.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wgl_core.c">
+      <Filter>Source Files\bindings</Filter>
+    </ClCompile>
+    <ClCompile Include="gl_core.c">
+      <Filter>Source Files\bindings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

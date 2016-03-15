@@ -1,17 +1,17 @@
 //Copyright (c) 2016 Sean Lynch
 /*
 	This file is part of rendering-engine.
-	
+
 	rendering-engine is free software : you can redistribute it and / or modify
 	it under the terms of the GNU Lesser General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	rendering-engine is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 	GNU Lesser General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public License
 	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -35,73 +35,85 @@
 
 namespace gl_3_3_backend
 {
+	template<typename vTy>
+	constexpr vTy max(vTy a, vTy b)
+	{
+		return a < b ? b : a;
+	}
+	template<typename vTy, typename... _Args>
+	constexpr vTy max(vTy a, vTy b, _Args... _rest)
+	{
+		return max<vTy>(max<vTy>(a, b), _rest...);
+	}
+
 	namespace enums
 	{
-		static constexpr GLenum internal_formats[] =
+		//Allocated memory for all of the enums
+		//Make sure that there aren't more enums than this
+		static GLenum enum_mem[128];
+
+		static GLenum* const internal_formats = enum_mem;
+		static GLenum* const formats = internal_formats + (max(R8, RG8, RGB8, R32F, RG32F, RGB32F, RGBA32F) + 1);
+		static GLenum* const data_types = formats + (max(RED, GREEN, BLUE, RG, RGB, RGBA, BGR, BGRA, DEPTH_COMPONENT, STENCIL_INDEX, DEPTH_STENCIL) + 1);
+		static GLenum* const shader_stages = data_types + (max(UNSIGNED_BYTE, UNSIGNED_SHORT, UNSIGNED_INT, BYTE, SHORT, INT, FLOAT) + 1);
+		static GLenum* const buffer_usages = shader_stages + (max(STREAM_DRAW, STREAM_READ, STREAM_COPY, STATIC_DRAW, STATIC_READ, STATIC_COPY, DYNAMIC_DRAW, DYNAMIC_READ, DYNAMIC_COPY) + 1);
+		static GLenum* const buffer_access_flags = buffer_usages + (max(STREAM_DRAW, STREAM_READ, STREAM_COPY, STATIC_DRAW, STATIC_READ, STATIC_COPY, DYNAMIC_DRAW, DYNAMIC_READ, DYNAMIC_COPY) + 1);
+
+		void init_enums()
 		{
-			GL_R8,
-			GL_RG8,
-			GL_RGB8,
-			GL_RGBA8,
-			GL_R32F,
-			GL_RG32F,
-			GL_RGB32F,
-			GL_RGBA32F
-		};
-		static constexpr GLenum formats[] =
-		{
-			GL_RED,
-			GL_GREEN,
-			GL_BLUE,
-			GL_RG,
-			GL_RGB,
-			GL_RGBA,
-			GL_BGR,
-			GL_BGRA,
-			GL_DEPTH_COMPONENT,
-			GL_STENCIL_INDEX,
-			GL_DEPTH_STENCIL
-		};
-		static constexpr GLenum data_types[] =
-		{
-			GL_UNSIGNED_BYTE,
-			GL_UNSIGNED_SHORT,
-			GL_UNSIGNED_INT,
-			GL_BYTE,
-			GL_SHORT,
-			GL_INT,
-			GL_FLOAT
-		};
-		static constexpr GLenum shader_stages[] =
-		{
-			GL_VERTEX_SHADER,
-			GL_FRAGMENT_SHADER,
-			GL_GEOMETRY_SHADER,
+			internal_formats[R8] = GL_R8;
+			internal_formats[RG8] = GL_RG8;
+			internal_formats[RGB8] = GL_RGB8;
+			internal_formats[RGBA8] = GL_RGBA8;
+			internal_formats[R32F] = GL_R32F;
+			internal_formats[RG32F] = GL_RG32F;
+			internal_formats[RGB32F] = GL_RGB32F;
+			internal_formats[RGBA32F] = GL_RGBA32F;
+
+			formats[RED] = GL_RED;
+			formats[GREEN] = GL_GREEN;
+			formats[BLUE] = GL_BLUE;
+			formats[RG] = GL_RG;
+			formats[RGB] = GL_RGB;
+			formats[RGBA] = GL_RGBA;
+			formats[BGR] = GL_BGR;
+			formats[BGRA] = GL_BGRA;
+			formats[DEPTH_COMPONENT] = GL_DEPTH_COMPONENT;
+			formats[STENCIL_INDEX] = GL_STENCIL_INDEX;
+			formats[DEPTH_STENCIL] = GL_DEPTH_STENCIL;
+			
+			data_types[UNSIGNED_BYTE] = GL_UNSIGNED_BYTE;
+			data_types[UNSIGNED_SHORT] = GL_UNSIGNED_SHORT;
+			data_types[UNSIGNED_INT] = GL_UNSIGNED_INT;
+			data_types[BYTE] = BYTE;
+			data_types[SHORT] = GL_SHORT;
+			data_types[INT] = GL_INT;
+			data_types[FLOAT] = GL_FLOAT;
+			
+			shader_stages[VERTEX] = GL_VERTEX_SHADER;
+			shader_stages[FRAGMENT] = GL_FRAGMENT_SHADER;
+			shader_stages[GEOMETRY] = GL_GEOMETRY_SHADER;
 			//None of these are supported
-			0, //GL_TESS_EVALUATION_SHADER,
-			0, //GL_TESS_CONTROL_SHADER,
-			0 //GL_COMPUTE_SHADER
-		};
-		static constexpr GLenum buffer_usages[] =
-		{
-			GL_STREAM_DRAW,
-			GL_STREAM_READ,
-			GL_STREAM_COPY,
-			GL_STATIC_DRAW,
-			GL_STATIC_READ,
-			GL_STATIC_COPY,
-			GL_DYNAMIC_DRAW,
-			GL_DYNAMIC_READ,
-			GL_DYNAMIC_COPY
-		};
-		static const GLenum buffer_access_flags[] =
-		{
-			GL_READ_ONLY,
-			GL_WRITE_ONLY,
-			GL_READ_WRITE
-		};
+			shader_stages[TESS_EVALUATION] = 0;
+			shader_stages[TESS_CONTROL] = 0;
+			shader_stages[COMPUTE] = 0;
+
+			buffer_usages[STREAM_DRAW] = GL_STREAM_DRAW;
+			buffer_usages[STREAM_READ] = GL_STREAM_READ;
+			buffer_usages[STREAM_COPY] = GL_STREAM_COPY;
+			buffer_usages[STATIC_DRAW] = GL_STATIC_DRAW;
+			buffer_usages[STATIC_READ] = GL_STATIC_READ;
+			buffer_usages[STATIC_COPY] = GL_STATIC_COPY;
+			buffer_usages[DYNAMIC_DRAW] = GL_DYNAMIC_DRAW;
+			buffer_usages[DYNAMIC_READ] = GL_DYNAMIC_READ;
+			buffer_usages[DYNAMIC_COPY] = GL_DYNAMIC_COPY;
+
+			buffer_access_flags[READ] = GL_READ_ONLY;
+			buffer_access_flags[WRITE] = GL_WRITE_ONLY;
+			buffer_access_flags[READ_WRITE] = GL_READ_WRITE;
+		}
 	}
-	
+
 	state* global_state = nullptr;
 
 	void enqueue(const command& cmd)
@@ -154,7 +166,7 @@ namespace gl_3_3_backend
 	void create_mesh(state& st, void* data)
 	{
 		DECLARE_CMD(create_mesh);
-		
+
 		GLuint vao;
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
@@ -351,5 +363,10 @@ extern "C" void _init(platform::window* win)
 extern "C" void _terminate()
 {
 	delete global_state;
+}
+
+extern "C" void _dispatch_commands(command_queue queue)
+{
+
 }
 
