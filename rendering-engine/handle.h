@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace gldr
+namespace re
 {
 	namespace detail
 	{

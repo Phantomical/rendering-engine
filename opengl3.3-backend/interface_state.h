@@ -8,6 +8,7 @@
 #include "context.h"
 
 #include <condition_variable>
+#include <thread>
 
 namespace gl_3_3_backend
 {
@@ -27,13 +28,13 @@ namespace gl_3_3_backend
 
 	struct state
 	{
-		gldr::allocators::standard alloc;
-		gldr::detail::mpsc_queue<command, decltype(alloc)> command_queue;
-		gldr::detail::concurrent_ra_array<buffer> buffers;
-		gldr::detail::concurrent_ra_array<shader> shaders;
-		gldr::detail::concurrent_ra_array<texture> textures;
-		gldr::detail::concurrent_ra_array<mesh> meshes;
-		gldr::detail::concurrent_ra_array<rt> render_targets;
+		re::allocators::standard alloc;
+		detail::mpsc_queue<command, decltype(alloc)> command_queue;
+		detail::concurrent_ra_array<buffer> buffers;
+		detail::concurrent_ra_array<shader> shaders;
+		detail::concurrent_ra_array<texture> textures;
+		detail::concurrent_ra_array<mesh> meshes;
+		detail::concurrent_ra_array<rt> render_targets;
 
 		context* gl_context;
 		semaphore sema;

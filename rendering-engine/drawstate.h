@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-namespace gldr
+namespace re
 {
 	struct drawstate
 	{

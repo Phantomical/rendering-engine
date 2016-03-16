@@ -37,7 +37,7 @@ namespace gl_3_3_backend
 		HGLRC ctx;
 	};
 
-	context* create_context(const gldr::platform::window& wnd)
+	context* create_context(const re::platform::window& wnd)
 	{
 		context ctx;
 		ctx.wnd = wnd.win;

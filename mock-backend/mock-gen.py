@@ -22,7 +22,7 @@ import sys
 file = sys.argv[1]
 outfile = sys.argv[2]
 outfile2 = sys.argv[3]
-namespace = "gldr"
+namespace = "re"
 
 tree = ET.parse(file)
 root = tree.getroot()

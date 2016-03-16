@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace gldr
+namespace re
 {
 	enum primitive_type : uint8_t
 	{

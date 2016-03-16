@@ -21,7 +21,7 @@
 #include "gl_interface.h"
 #include "interface_state.h"
 
-using namespace gldr;
+using namespace re;
 
 namespace gl_3_3_backend
 {

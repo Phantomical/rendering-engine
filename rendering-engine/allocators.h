@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <atomic>
 
-namespace gldr
+namespace re
 {
 	namespace allocators
 	{
