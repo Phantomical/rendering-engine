@@ -1,7 +1,7 @@
 #include "interface.h"
 #include "allocators.h"
 
-namespace gldr
+namespace re
 {
 	void backend::sync_callback()
 	{

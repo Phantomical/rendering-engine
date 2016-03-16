@@ -19,7 +19,7 @@
 #include "catch.hpp"
 #include "allocators.h"
 
-using namespace gldr;
+using namespace re;
 
 TEST_CASE("test that allocators::linear_atomic correctly allocates memory")
 {

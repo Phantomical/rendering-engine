@@ -21,8 +21,8 @@
 
 TEST_CASE("test that all items can be dequeued from the queue with basic types")
 {
-	gldr::allocators::standard alloc;
-	gldr::detail::mpsc_queue<double> queue(&alloc);
+	re::allocators::standard alloc;
+	gl_3_3_backend::detail::mpsc_queue<double> queue(&alloc);
 
 	SECTION("test that the same number items are dequeued as are enqueued")
 	{

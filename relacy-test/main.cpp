@@ -24,8 +24,8 @@
 
 #include "mpsc_queue.h"
 
-using namespace gldr::detail;
-using namespace gldr::allocators;
+using namespace gl_3_3_backend::detail;
+using namespace re::allocators;
 
 struct queue_test : rl::test_suite<queue_test, 4>
 {

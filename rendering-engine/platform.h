@@ -27,7 +27,7 @@
 #include <Windows.h>
 #endif
 
-namespace gldr
+namespace re
 {
 	namespace platform
 	{

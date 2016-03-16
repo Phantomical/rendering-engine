@@ -122,23 +122,23 @@ namespace gl_3_3_backend
 		global_state->sema.signal();
 	}
 
-	detail::handle alloc_mesh_handle()
+	re::detail::handle alloc_mesh_handle()
 	{
 		return global_state->meshes.alloc();
 	}
-	detail::handle alloc_buffer_handle()
+	re::detail::handle alloc_buffer_handle()
 	{
 		return global_state->buffers.alloc();
 	}
-	detail::handle alloc_shader_handle()
+	re::detail::handle alloc_shader_handle()
 	{
 		return global_state->shaders.alloc();
 	}
-	detail::handle alloc_texture_handle()
+	re::detail::handle alloc_texture_handle()
 	{
 		return global_state->textures.alloc();
 	}
-	detail::handle alloc_render_target_handle()
+	re::detail::handle alloc_render_target_handle()
 	{
 		return global_state->render_targets.alloc();
 	}
@@ -234,7 +234,7 @@ namespace gl_3_3_backend
 
 		if (cmd->transform_feedback_varyings != nullptr && cmd->num_tf_varyings != 0)
 		{
-			glTransformFeedbackVaryings(program, cmd->num_tf_varyings, cmd->transform_feedback_varyings, GL_INTERLEAVED_ATTRIBS);
+			glTransformFeedbackVaryings(program, static_cast<GLsizei>(cmd->num_tf_varyings), cmd->transform_feedback_varyings, GL_INTERLEAVED_ATTRIBS);
 		}
 
 		glLinkProgram(program);

@@ -27,7 +27,7 @@
 #include <atomic>
 #endif
 
-namespace gldr
+namespace gl_3_3_backend
 {
 	namespace detail
 	{
@@ -81,7 +81,7 @@ namespace gldr
 		//TODO: Exaustively test this with relacy
 		//typedef int vTy;
 		//typedef allocators::standard vAlloc;
-		template<typename vTy, typename vAlloc = allocators::standard>
+		template<typename vTy, typename vAlloc = re::allocators::standard>
 		class mpsc_queue
 		{
 		public:

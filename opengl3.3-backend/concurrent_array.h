@@ -30,7 +30,7 @@
 #	pragma warning(disable:4100)
 #endif
 
-namespace gldr
+namespace gl_3_3_backend
 {
 	namespace detail
 	{

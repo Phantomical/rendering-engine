@@ -20,7 +20,7 @@
 #include "mock-data.h"
 #include "interface.h"
 
-using namespace gldr;
+using namespace re;
 
 #define TEST_BACKEND_METHOD(method, ...) \
 	SECTION("testing that" #method "is called correctly when corresponding method is called in the backend") \
