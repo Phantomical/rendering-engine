@@ -25,7 +25,7 @@
 #include "mpsc_queue.h"
 
 using namespace gl_3_3_backend::detail;
-using namespace re::allocators;
+using namespace RE_NAMESPACE::allocators;
 
 struct queue_test : rl::test_suite<queue_test, 4>
 {

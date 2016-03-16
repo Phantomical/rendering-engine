@@ -19,7 +19,7 @@
 #include "catch.hpp"
 #include "allocators.h"
 
-using namespace re;
+using namespace RE_NAMESPACE;
 
 TEST_CASE("test that allocators::linear_atomic correctly allocates memory")
 {

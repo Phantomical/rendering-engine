@@ -81,7 +81,7 @@ namespace gl_3_3_backend
 		//TODO: Exaustively test this with relacy
 		//typedef int vTy;
 		//typedef allocators::standard vAlloc;
-		template<typename vTy, typename vAlloc = re::allocators::standard>
+		template<typename vTy, typename vAlloc = RE_NAMESPACE::allocators::standard>
 		class mpsc_queue
 		{
 		public:

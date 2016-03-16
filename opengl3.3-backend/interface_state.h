@@ -28,7 +28,7 @@ namespace gl_3_3_backend
 
 	struct state
 	{
-		re::allocators::standard alloc;
+		RE_NAMESPACE::allocators::standard alloc;
 		detail::mpsc_queue<command, decltype(alloc)> command_queue;
 		detail::concurrent_ra_array<buffer> buffers;
 		detail::concurrent_ra_array<shader> shaders;

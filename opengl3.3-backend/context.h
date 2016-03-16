@@ -25,7 +25,7 @@ namespace gl_3_3_backend
 {
 	struct context;
 
-	context* create_context(const re::platform::window& win);
+	context* create_context(const RE_NAMESPACE::platform::window& win);
 	void make_context_current(context* ctx);
 	void swap_context_buffers(context* ctx);
 	void delete_context(context* ctx);

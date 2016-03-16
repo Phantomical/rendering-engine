@@ -77,7 +77,7 @@ write("#else")
 write("#define EXPORT")
 write("#endif")
 write("")
-write("using namespace " + namespace + ";")
+write("using namespace RE_NAMESPACE;")
 write("")
 
 #create list of functions
@@ -116,7 +116,7 @@ for func in root.findall("function"):
     funcs.append(func_t(name, rettype, args, cnt))
 
 for func in funcs:
-    write("__declspec(dllexport) size_t " + func.name + "_called = 0;")
+    write("EXPORT size_t " + func.name + "_called = 0;")
 
 write("")
 

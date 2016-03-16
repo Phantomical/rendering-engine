@@ -1,7 +1,7 @@
 #include "interface.h"
 #include "allocators.h"
 
-namespace re
+namespace RE_NAMESPACE
 {
 	void backend::sync_callback()
 	{

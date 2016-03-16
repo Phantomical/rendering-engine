@@ -87,7 +87,7 @@ write('#endif')
 write('')
 write('typedef DefaultSemaphoreType semaphore;')
 write("")
-write('using namespace ' + namespace.lower() + ';')
+write('using namespace RE_NAMESPACE;')
 write
 
 #create list of functions
