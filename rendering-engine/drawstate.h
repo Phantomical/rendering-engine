@@ -21,7 +21,9 @@
 
 #include <cstdint>
 
-namespace re
+#include "defs.h"
+
+namespace RE_NAMESPACE
 {
 	struct drawstate
 	{

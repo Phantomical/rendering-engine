@@ -93,7 +93,7 @@ write("#else")
 write("#\tdefine " + namespace.upper() + "_BACKEND_CALL_CONV")
 write("#endif")
 write("")
-write("namespace " + namespace)
+write("namespace RE_NAMESPACE")
 write("{")
 level += 1
 

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allocators.h" />
+    <ClInclude Include="defs.h" />
     <ClInclude Include="draw_command.h" />
     <ClInclude Include="drawstate.h" />
     <ClInclude Include="handle.h" />

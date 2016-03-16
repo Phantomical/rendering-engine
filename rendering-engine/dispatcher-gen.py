@@ -78,7 +78,7 @@ write("void* load_init(const char*);")
 write("void* load_func(void*, const char*);")
 write("void load_terminate(void*);")
 write("")
-write("namespace " + namespace)
+write("namespace RE_NAMESPACE")
 write("{")
 level += 1
 

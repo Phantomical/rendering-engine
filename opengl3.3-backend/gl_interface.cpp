@@ -33,6 +33,8 @@
 #define SEMA_SIGNAL_COUNT 1
 #define DECLARE_CMD(type) auto cmd = static_cast<commands::type*>(data)
 
+using namespace RE_NAMESPACE;
+
 namespace gl_3_3_backend
 {
 	template<typename vTy>
@@ -122,23 +124,23 @@ namespace gl_3_3_backend
 		global_state->sema.signal();
 	}
 
-	re::detail::handle alloc_mesh_handle()
+	RE_NAMESPACE::detail::handle alloc_mesh_handle()
 	{
 		return global_state->meshes.alloc();
 	}
-	re::detail::handle alloc_buffer_handle()
+	RE_NAMESPACE::detail::handle alloc_buffer_handle()
 	{
 		return global_state->buffers.alloc();
 	}
-	re::detail::handle alloc_shader_handle()
+	RE_NAMESPACE::detail::handle alloc_shader_handle()
 	{
 		return global_state->shaders.alloc();
 	}
-	re::detail::handle alloc_texture_handle()
+	RE_NAMESPACE::detail::handle alloc_texture_handle()
 	{
 		return global_state->textures.alloc();
 	}
-	re::detail::handle alloc_render_target_handle()
+	RE_NAMESPACE::detail::handle alloc_render_target_handle()
 	{
 		return global_state->render_targets.alloc();
 	}

@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace re
+namespace RE_NAMESPACE
 {
 	enum primitive_type : uint8_t
 	{
