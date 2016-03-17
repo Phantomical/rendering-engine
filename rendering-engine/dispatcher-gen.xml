@@ -71,7 +71,7 @@
     <value name="INT"/>
     <value name="FLOAT"/>
   </enum>
-  
+
   <struct name="draw_command">
     <no-def/>
   </struct>
@@ -203,4 +203,5 @@
   <function name="device_sync">
     <return type="void"/>
   </function>
+
 </dispatcher>

@@ -152,7 +152,11 @@ for struct in root.findall("struct"):
     write("};")
 
 write("")
-
+write("namespace platform {")
+level += 1
+write("struct window;")
+level -= 1
+write("}")
 write("class backend")
 write("{")
 write("private:")
@@ -160,7 +164,7 @@ level += 1
 write("struct state;")
 write("state* _state;")
 
-write("void init(const std::string& backend_lib);")
+write("void init(const std::string& backend_lib, platform::window* win);")
 write("void terminate();")
 write("void sync_callback();")
 write("allocators::linear_atomic* allocator();")
@@ -169,7 +173,7 @@ write("")
 level -= 1
 write("public:")
 level += 1
-write("backend(const std::string& backend_lib);")
+write("backend(const std::string& backend_lib, platform::window* win);")
 write("~backend();")
 write("backend(const backend&) = delete;")
 write("void operator =(const backend&) = delete;")

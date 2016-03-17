@@ -69,6 +69,7 @@ write("""/*
 """)
 
 write("#include \"interface.h\"")
+write("#include \"platform.h\"")
 write("")
 write("#define CALL_CONV " + namespace.upper() + "_BACKEND_CALL_CONV")
 write("#ifdef _WIN32")
@@ -135,7 +136,7 @@ for func in funcs:
     write("}")
 
 write("")
-write("extern \"C\" void EXPORT CALL_CONV _init() { }")
+write("extern \"C\" void EXPORT CALL_CONV _init(platform::window*) { }")
 write("extern \"C\" void EXPORT CALL_CONV _terminate() { }")
 
 with open(outfile, "w") as f:

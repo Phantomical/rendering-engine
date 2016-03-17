@@ -1,17 +1,17 @@
 //Copyright (C) 2016 Sean Lynch
 /*
 	This file is part of rendering-engine.
-	
+
 	rendering-engine is free software : you can redistribute it and / or modify
 	it under the terms of the GNU Lesser General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	rendering-engine is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 	GNU Lesser General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public License
 	along with rendering-engine. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -29,9 +29,9 @@ using namespace RE_NAMESPACE;
 TEST_CASE("backend methods are called correctly when the backend interface methods are called")
 {
 #if _WIN32
-	backend bck{ "mock-backend.dll" };
+	backend bck{ "mock-backend.dll", nullptr };
 #else
-	backend bck{ "mock-backend.a" };
+	backend bck{ "mock-backend.a", nullptr };
 #endif
 
 	REQUIRE(bck.is_valid());
@@ -46,7 +46,7 @@ TEST_CASE("backend methods are called correctly when the backend interface metho
 	TEST_BACKEND_METHOD(create_texture_2d, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, nullptr);
 	TEST_BACKEND_METHOD(create_texture_3d, 0, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, nullptr);
 	TEST_BACKEND_METHOD(create_texture_cubemap, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, nullptr);
-	TEST_BACKEND_METHOD(create_texture_cubemap, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, array)
+	TEST_BACKEND_METHOD(create_texture_cubemap, 0, 0, internal_format::R8, image_format::RED, data_type::UNSIGNED_BYTE, array);
 	TEST_BACKEND_METHOD(delete_mesh, mesh_handle());
 	TEST_BACKEND_METHOD(delete_buffer, buffer_handle());
 	TEST_BACKEND_METHOD(delete_shader, shader_handle());

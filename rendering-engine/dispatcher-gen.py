@@ -70,6 +70,7 @@ write("""/*
 
 write("#include \"allocators.h\"")
 write("#include \"interface.h\"")
+write("#include \"platform.h\"")
 write("#include <functional>")
 write("")
 write("#define CALL_CONV " + namespace.upper() + "_BACKEND_CALL_CONV")
@@ -188,7 +189,7 @@ for func in funcs:
 write("")
 
 #init method
-write("void backend::init(const std::string& lib)")
+write("void backend::init(const std::string& lib, platform::window* window)")
 write("{")
 level += 1
 write("_state = new state;")
@@ -200,11 +201,11 @@ for func in funcs:
         + "_proc>(load_func(_state->handle, \"_" + func.name + "\"));")
 
 write("_state->terminate_func = reinterpret_cast<decltype(_state->terminate_func)>(load_func(_state->handle, \"_terminate\"));")
-write("void(*init_func)() = reinterpret_cast<void(*)()>(load_func(_state->handle, \"_init\"));")
+write("void(*init_func)(platform::window*) = reinterpret_cast<void(*)(platform::window*)>(load_func(_state->handle, \"_init\"));")
 write("if (init_func)")
 write("{")
 level += 1
-write("init_func();")
+write("init_func(window);")
 level -= 1
 write("}")
 write("else")
@@ -232,10 +233,10 @@ write("}")
 level -= 1
 write("}")
 
-write("backend::backend(const std::string& backend_lib)")
+write("backend::backend(const std::string& backend_lib, platform::window* window)")
 write("{")
 level += 1
-write("init(backend_lib);")
+write("init(backend_lib, window);")
 level -= 1
 write("}")
 
