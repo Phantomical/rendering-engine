@@ -347,6 +347,11 @@ namespace gl_3_3_backend
 		glBufferData(GL_ARRAY_BUFFER, cmd->size, cmd->data, buf.usage);
 	}
 
+	void dispatch_commands(state& st, void* data)
+	{
+
+	}
+
 	void create_render_target(state& UNUSED(st), void* UNUSED(data))
 	{
 		//TODO: Implement
@@ -374,6 +379,6 @@ extern "C" void _terminate()
 
 extern "C" void _dispatch_commands(command_queue queue)
 {
-
+	
 }
 

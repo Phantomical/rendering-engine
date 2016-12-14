@@ -36,6 +36,9 @@
     <ClCompile Include="gl_core.c">
       <Filter>Source Files\bindings</Filter>
     </ClCompile>
+    <ClCompile Include="command_dispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="concurrent_array.h">

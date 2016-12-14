@@ -38,6 +38,7 @@ namespace gl_3_3_backend
 
 		context* gl_context;
 		semaphore sema;
+		drawstate drawstate;
 		std::atomic_bool terminate;
 		std::thread thread;
 
@@ -47,7 +48,8 @@ namespace gl_3_3_backend
 			gl_context(create_context(*win)),
 			sema(0),
 			terminate(false),
-			thread(executor_thread, this)
+			thread(executor_thread, this),
+			drawstate(0)
 		{
 			std::atomic_thread_fence(std::memory_order_release);
 			sema.signal();
@@ -63,6 +65,8 @@ namespace gl_3_3_backend
 			delete_context(gl_context);
 		}
 	};
+
+	extern state* global_state;
 }
 
 #endif
