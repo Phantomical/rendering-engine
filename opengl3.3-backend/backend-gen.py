@@ -140,6 +140,7 @@ for func in root.findall("function"):
 
 write('namespace gl_3_3_backend')
 write('{')
+write('using RE_NAMESPACE::detail::handle;')
 level += 1
 write('struct state;')
 write('typedef void(*command_func)(state& state, void* data);')
@@ -192,7 +193,7 @@ for func in funcs:
     for arg in func.largs:
         write(arg[0] + ' ' + arg[1] + ';')
     if func.rettype in handles:
-        write("detail::handle _handle;")
+        write("handle _handle;")
     elif func.rettype != "void":
         write(func.rettype + " _ret;")
     level -= 1
@@ -224,7 +225,7 @@ level -= 1;
 write('};')
 
 for handle in handles:
-    write('detail::handle alloc_' + handle + '();')
+    write('handle alloc_' + handle + '();')
 write('void enqueue(const command&);')
 
 for func in funcs:
@@ -234,7 +235,6 @@ level -= 1
 write('}')
 
 write('using namespace gl_3_3_backend;')
-write('using detail::handle;')
 
 for func in funcs:
 

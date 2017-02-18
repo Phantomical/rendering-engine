@@ -10,6 +10,9 @@
 #include <condition_variable>
 #include <thread>
 
+typedef unsigned int GLuint;
+typedef unsigned int GLenum;
+
 namespace gl_3_3_backend
 {
 	struct state;

@@ -377,8 +377,4 @@ extern "C" void _terminate()
 	delete global_state;
 }
 
-extern "C" void _dispatch_commands(command_queue queue)
-{
-	
-}
 
